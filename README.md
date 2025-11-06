@@ -51,7 +51,7 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 
 1.  **Initial Attempt (Planner/Prover):** The LLM receives the problem and few-shot examples and generates solution $\mathbf{S}_i$.
 2.  **Critique (Verifier):** A new prompt is sent, instructing the LLM to adopt the Verifier role. It analyzes $\mathbf{S}_i$ and must output a **structured JSON** object:
-    * **JSON Schema:** $\{\text{"valid": bool, "error\_category": str, "critique\_summary": str}\}$
+    * **JSON Schema:** $`\{\text{"valid": bool, "error\_category": str, "critique\_summary": str}\}`$
     * **Error Categories:** The Verifier is guided to classify errors into: `CALCULATION_ERROR`, `CONCEPTUAL_FLAW`, or `LOGIC_OMISSION`.
 3.  **Correction (Planner/Prover):** If the Verifier outputs `valid: false`, the system parses the JSON. A final prompt is constructed, instructing the LLM to **incorporate the specific error category and critique summary** to generate a corrected solution $\mathbf{S}_{i+1}$.
 
