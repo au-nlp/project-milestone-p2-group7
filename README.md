@@ -75,6 +75,8 @@ Each component of this project—from dataset selection to architectural design 
 
 **The PCAF’s multi-agent structure (Solver, Verifier, Planner)** enables systematic self-reflection and correction within a single LLM instance, directly addressing the known issues of arithmetic and logical consistency that often reduce MathArena scores.
 
+*https://arxiv.org/pdf/2502.08680
+
 **The use of specialized datasets (MathInstruct and NaturalProofs)** supports role-specific prompt engineering, ensuring that each agent’s reasoning, critique, and planning processes are grounded in examples of mathematically sound reasoning and structured verification.
 
 **Iterative prompting and JSON-based** feedback loops transform what is typically a linear reasoning process into a collaborative refinement cycle, helping the model converge more reliably on correct final answers.
