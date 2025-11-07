@@ -5,7 +5,7 @@
 ## Project Proposal: Prompt-Based Collaborative Agent Framework (PCAF) for Enhanced LLM Mathematical Reasoning
 
 ### Abstract
-This project aims to enhance the final-answer acccuracy of a selected Large Language Model (LLM), specifically one **underperforming or untested** on specific sub-sections of the **Matharena** benchmark. We will implement a **Prompt-Based Collaborative Agent Framework (PCAF)**, which simulates a multi-agent system using only sequential, specialized zero/few-shot prompts within the context of a *single* LLM instance hosted on Azure. The framework employs three virtual agents, a **Solver**, a **Verifier**, and a **Planner**, who communicate via structured **JSON** output. The core goal is to demonstrate that this reflective, architecturally structured prompting approach provides a clear performance gain over the model's standard Zero-Shot Chain-of-Thought (CoT) baseline, proving the value of structured collaboration in complex mathematical reasoning.
+This project aims to enhance the final-answer acccuracy of a selected Large Language Model (LLM), specifically one **underperforming or untested** on specific sub-sections of the **Matharena** benchmark. We will implement a **Prompt-Based Collaborative Agent Framework (PCAF)**, which simulates a multi-agent system using only sequential, specialized zero/few-shot prompts within the context of a single LLM instance hosted on Azure. The framework employs three virtual agents, a **Solver**, a **Verifier**, and a **Planner**, who communicate via structured **JSON** output. The core goal is to demonstrate that this reflective, architecturally structured prompting approach provides a clear performance gain over the model's standard Zero-Shot Chain-of-Thought (CoT) baseline, proving the value of structured collaboration in complex mathematical reasoning.
 
 ---
 
@@ -13,7 +13,7 @@ This project aims to enhance the final-answer acccuracy of a selected Large Lang
 
 1. **Targeted Performance Gain:** We provide a strong counter-measure to known LLM weaknesses (e.g., calculation errors, stubbornness in self-correction) by applying the PCAF to a model with a clear performance ceiling on Matharena's final-answer sub-sections (like AIME, HMMT, or CMIMC)
 2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure***, which uses sequential, role-specific prompts to forche the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)** This simulates a high-quality, iterative self-refinement loop.
-3. **Generalizability of Prompting:** By proving that this collaborative *prompting* architecture yields significant gains on a robust, uncontaminated benchmark like MathArena, we demonstrate the power of **structured context management** as a high-value technique independent of the model's size or specific training data.
+3. **Generalizability of Prompting:** By proving that this collaborative prompting architecture yields significant gains on a robust, uncontaminated benchmark like MathArena, we demonstrate the power of **structured context management** as a high-value technique independent of the model's size or specific training data.
 
 ---
 
@@ -35,7 +35,7 @@ Since we are relying on **prompting**, these datasets serve as sources for **few
 
 | Dataset | Role in Project | Usage for Prompt Design/Evaluation |
 | :--- | :--- | :--- |
-| **MathArena** | **Evaluation & Baseline** | Used *only* for testing (the primary metric). |
+| **MathArena** | **Evaluation & Baseline** | Used only for testing (the primary metric). |
 | **MathInstruct** | **Few-Shot Exemplar Source** | Manually transform a few complex problems into full, multi-turn PCAF traces (showing an error and correction) to embed directly in the system prompt. |
 | **NaturalProofs** | **Verifier Prompt Guidance** | Inform the design of the **Verifier Agent's system prompt** and the definitive **Error Categories** for structured JSON output. |
 
