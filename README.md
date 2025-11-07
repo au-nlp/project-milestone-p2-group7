@@ -12,7 +12,7 @@ This project aims to enhance the final-answer acccuracy of a selected Large Lang
 ### Contributions and Novelty
 
 1. **Targeted Performance Gain:** We provide a strong counter-measure to known LLM weaknesses (e.g., calculation errors, stubbornness in self-correction) by applying the PCAF to a model with a clear performance ceiling on Matharena's final-answer sub-sections (like AIME, HMMT, or CMIMC)
-2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure***, which uses sequential, role-specific prompts to forche the single LLM to adopt the roles of **Generation (Prover)** and **Critique (Verifier)**. This simulates a high-quality, iterative self-refinement loop.
+2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure***, which uses sequential, role-specific prompts to forche the single LLM to adopt the roles of **Generation (Solver)** and **Critique (Verifier)**. This simulates a high-quality, iterative self-refinement loop.
 3. **Generalizability of Prompting:** By proving that this collaborative *prompting* architecture yields significant gains on a robust, uncontaminated benchmark like MathArena, we demonstrate the power of **structured context management** as a high-value technique independent of the model's size or specific training data.
 
 ---
@@ -49,7 +49,7 @@ The entire system runs on the **single selected LLM** hosted on Azure, through i
 #### Agent Roles and Communication (Sequential Prompting)
 The PCAF relies on a sequence of API calls to the single LLM, dynamically switching its role via prompts. The loop runs for a maximum of $N$ iterations ($N=3$ max).
 
-1.  **Initial Attempt (Planner/Prover):** The LLM receives the problem and few-shot examples and generates solution $\mathbf{S}_i$.
+1.  **Initial Attempt (Solver):** The LLM receives the problem and few-shot examples and generates solution $\mathbf{S}_i$.
 2.  **Critique (Verifier):** A new prompt is sent, instructing the LLM to adopt the Verifier role. It analyzes $\mathbf{S}_i$ and must output a **structured JSON** object:
     * **JSON Schema:** $`\{\text{"valid": bool, "error\_category": str, "critique\_summary": str}\}`$
     * **Error Categories:** The Verifier is guided to classify errors into: `CALCULATION_ERROR`, `CONCEPTUAL_FLAW`, or `LOGIC_OMISSION`.
