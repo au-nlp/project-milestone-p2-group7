@@ -47,7 +47,7 @@ Since we are relying on **prompting**, these datasets serve as sources for **few
 The entire system runs on the **single selected LLM** hosted on Azure, through iterative prompting.
 
 #### Agent Roles and Communication (Sequential Prompting)
-The PCAF relies on a sequence of API calls to the single LLM, dynamically switching its role via prompts. The loop runs for a maximum of $N$ iterations ($N=3$ max).
+The PCAF relies on a sequence of API calls to the single LLM, dynamically switching its role via prompts. The loop runs for a maximum of $N$ iterations ($N=?$ max).
 
 1.  **Initial Attempt (Solver):** The LLM receives the problem and few-shot examples and generates solution $\mathbf{S}_i$.
 2.  **Critique (Verifier):** A new prompt is sent, instructing the LLM to adopt the Verifier role. It analyzes $\mathbf{S}_i$ and must output a **structured JSON** object:
