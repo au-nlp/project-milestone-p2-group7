@@ -70,7 +70,7 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 ---
 
 
-### Connection to Project Goal
+### Reaching Project Goal
 Each component of this project—from dataset selection to architectural design and evaluation strategy—has been deliberately structured to achieve our central objective: improving final-answer accuracy on the MathArena benchmark.
 
 **The PCAF’s multi-agent structure (Solver, Verifier, Planner)** enables systematic self-reflection and correction within a single LLM instance, directly addressing the known issues of arithmetic and logical consistency that often reduce MathArena scores.
