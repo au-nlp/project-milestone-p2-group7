@@ -7,6 +7,10 @@
 ### Abstract
 This project aims to enhance the final-answer acccuracy of a selected Large Language Model (LLM), specifically one **underperforming or untested** on specific sub-sections of the **Matharena** benchmark. We will implement a **Prompt-Based Collaborative Agent Framework (PCAF)**, which simulates a multi-agent system using only sequential, specialized zero/few-shot prompts within the context of a single LLM instance hosted on Azure. The framework employs three virtual agents, a **Solver**, a **Verifier**, and a **Planner**, who communicate via structured **JSON** output. The core goal is to demonstrate that this reflective, architecturally structured prompting approach provides a clear performance gain over the model's standard Zero-Shot Chain-of-Thought (CoT) baseline, proving the value of structured collaboration in complex mathematical reasoning.
 
+Also inspired by these papers: 
+  - https://arxiv.org/pdf/2503.11657
+  - https://arxiv.org/abs/2503.03205
+  - https://arxiv.org/abs/2509.22819
 ---
 
 ### Contributions and Novelty
@@ -19,7 +23,8 @@ This project aims to enhance the final-answer acccuracy of a selected Large Lang
 
 ### Model Selection Criteria 
 
-We have selected the DeepSeek-V3-03-24 model, which hasn't been fully tested on the final-answer MathArena benchmark. It achieved a score of 50% on AIME and 29% on HMMT, and still needs to be tested on BRUMO, SMT, and CMIMC. The model runs on Azure's AI Foundry.
+We have selected the DeepSeek-V3-03-24 model, which hasn't been fully tested on the final-answer MathArena benchmark. It achieved a score of 50% on AIME and 29% on HMMT, and still needs to be tested on BRUMO, SMT, and CMIMC. The model runs on Azure's AI Foundry. First we were thinking to use DeepSeek-V3 which has similar attributes but we couldn't make the model work with Azure since it's a "retired model".
+
 
 ---
 
@@ -30,7 +35,7 @@ Since we are relying on **prompting**, these datasets serve as sources for **few
 | Dataset | Role in Project | Usage for Prompt Design/Evaluation |
 | :--- | :--- | :--- |
 | **MathArena** | **Evaluation & Baseline** | Used only for testing (the primary metric). |
-| **MathInstruct** | **Few-Shot Exemplar Source** | Manually transform a few complex problems into full, multi-turn PCAF traces (showing an error and correction) to embed directly in the system prompt. |
+| **MathInstruct** | **Few-Shot Example Source** | Manually transform a few complex problems into full, multi-turn PCAF traces (showing an error and correction) to embed directly in the system prompt. |
 | **NaturalProofs** | **Verifier Prompt Guidance** | Inform the design of the **Verifier Agent's system prompt** and the definitive **Error Categories** for structured JSON output. |
 
 
@@ -70,10 +75,12 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 ---
 
 
-### Connection to Project Goal
+### Reaching Project Goal
 Each component of this project—from dataset selection to architectural design and evaluation strategy—has been deliberately structured to achieve our central objective: improving final-answer accuracy on the MathArena benchmark.
 
 **The PCAF’s multi-agent structure (Solver, Verifier, Planner)** enables systematic self-reflection and correction within a single LLM instance, directly addressing the known issues of arithmetic and logical consistency that often reduce MathArena scores.
+
+*https://arxiv.org/pdf/2502.08680
 
 **The use of specialized datasets (MathInstruct and NaturalProofs)** supports role-specific prompt engineering, ensuring that each agent’s reasoning, critique, and planning processes are grounded in examples of mathematically sound reasoning and structured verification.
 
