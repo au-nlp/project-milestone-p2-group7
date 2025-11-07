@@ -70,6 +70,17 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 ---
 
 
+### Connection to Project Goal
+Each component of this project—from dataset selection to architectural design and evaluation strategy—has been deliberately structured to achieve our central objective: improving final-answer accuracy on the MathArena benchmark.
 
+**The PCAF’s multi-agent structure (Solver, Verifier, Planner)** enables systematic self-reflection and correction within a single LLM instance, directly addressing the known issues of arithmetic and logical consistency that often reduce MathArena scores.
+
+**The use of specialized datasets (MathInstruct and NaturalProofs)** supports role-specific prompt engineering, ensuring that each agent’s reasoning, critique, and planning processes are grounded in examples of mathematically sound reasoning and structured verification.
+
+**Iterative prompting and JSON-based** feedback loops transform what is typically a linear reasoning process into a collaborative refinement cycle, helping the model converge more reliably on correct final answers.
+
+**The evaluation framework**, which compares PCAF’s performance to the baseline Zero-Shot CoT results, provides a clear, quantitative measure of improvement, allowing us to attribute accuracy gains directly to the proposed collaborative prompting structure.
+
+Through this integrated design, the PCAF serves as a targeted mechanism to elevate the reasoning reliability and final-answer accuracy of LLMs on MathArena’s final-answer sub-sections—achieving the core goal established at the outset of this project.
 
 
