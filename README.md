@@ -12,7 +12,7 @@ This project aims to enhance the final-answer acccuracy of a selected Large Lang
 ### Contributions and Novelty
 
 1. **Targeted Performance Gain:** We provide a strong counter-measure to known LLM weaknesses (e.g., calculation errors, stubbornness in self-correction) by applying the PCAF to a model with a clear performance ceiling on Matharena's final-answer sub-sections (like AIME, HMMT, or CMIMC)
-2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure***, which uses sequential, role-specific prompts to forche the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)** This simulates a high-quality, iterative self-refinement loop.
+2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure**, which uses sequential, role-specific prompts to forche the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)** This simulates a high-quality, iterative self-refinement loop.
 3. **Generalizability of Prompting:** By proving that this collaborative prompting architecture yields significant gains on a robust, uncontaminated benchmark like MathArena, we demonstrate the power of **structured context management** as a high-value technique independent of the model's size or specific training data.
 
 ---
