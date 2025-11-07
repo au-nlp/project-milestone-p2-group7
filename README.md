@@ -7,6 +7,9 @@
 ### Abstract
 This project aims to enhance the final-answer acccuracy of a selected Large Language Model (LLM), specifically one **underperforming or untested** on specific sub-sections of the **Matharena** benchmark. We will implement a **Prompt-Based Collaborative Agent Framework (PCAF)**, which simulates a multi-agent system using only sequential, specialized zero/few-shot prompts within the context of a single LLM instance hosted on Azure. The framework employs three virtual agents, a **Solver**, a **Verifier**, and a **Planner**, who communicate via structured **JSON** output. The core goal is to demonstrate that this reflective, architecturally structured prompting approach provides a clear performance gain over the model's standard Zero-Shot Chain-of-Thought (CoT) baseline, proving the value of structured collaboration in complex mathematical reasoning.
 
+*Also inspired by these papers: - https://www.semanticscholar.org/reader/8d6839662f4c0e564be11860f24328d35ad90512
+                                - https://www.semanticscholar.org/reader/417864258c936d4c305feb6ae971ab079285e8da
+
 ---
 
 ### Contributions and Novelty
