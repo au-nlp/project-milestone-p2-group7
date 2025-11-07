@@ -19,13 +19,7 @@ This project aims to enhance the final-answer acccuracy of a selected Large Lang
 
 ### Model Selection Criteria (Based on Azure Access)
 
-We will select an LLM based on its public performance on MathArena:
-
-1. ?
-2. ? 
-3. ?
-
-By using Azure compute, we can host a powerful model from Criterion A or B, ensuring a robust test environment.
+We have selected the DeepSeek-V3-03-24 model, which hasn't been fully tested on the final-answer MathArena benchmark. It achieved a score of 50% on AIME and 29% on HMMT, and still needs to be tested on BRUMO, SMT, and CMIMC. The model runs on Azure's AI Foundry.
 
 ---
 
