@@ -64,13 +64,13 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 
 ### Proposed Timeline
 
-| Week | Internal Milestone (Team Focus) | P2 Requirement Focus |
+| Week | Internal Milestone (Team Focus) | Requirement Focus |
 | :--- | :--- | :--- |
-| **Week 1 (P2)** | Select LLM, establish **Zero-Shot CoT Baseline** on MathArena subset. Draft few-shot traces. | **main.ipynb (Data/Baseline), Feasibility check.** |
-| **Week 2 (P2)** | Finalize P/V/P role prompts and **JSON schema**. Implement the iterative loop logic and JSON parsing code. **Finalize README.** | **Code Quality, README.md, System Logic.** |
+| **Week 1** | Select LLM, establish **Zero-Shot CoT Baseline** on MathArena subset. Draft few-shot traces. | **main.ipynb (Data/Baseline), Feasibility check.** |
+| **Week 2** | Finalize P/V/P role prompts and **JSON schema**. Implement the iterative loop logic and JSON parsing code. **Finalize README.** | **Code Quality, README.md, System Logic.** |
 | **Week 3** | Full PCAF integration. Run controlled tests on small dev set. Debug prompt logic and JSON stability. | **System integration, Prompt stability.** |
 | **Week 4** | **Evaluation Run 1.** Run PCAF on larger subset of MathArena. Compare performance uplift against the baseline. | **Initial results, Uplift analysis.** |
-| **Week 5-6 (P3)** | Final Evaluation. Complete final comparison and documentation. | **Final Deliverable.** |
+| **Week 5-6** | Final Evaluation. Complete final comparison and documentation. | **Final Deliverable.** |
 
 
 ---
