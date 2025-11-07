@@ -19,7 +19,8 @@ This project aims to enhance the final-answer acccuracy of a selected Large Lang
 
 ### Model Selection Criteria 
 
-We have selected the DeepSeek-V3-03-24 model, which hasn't been fully tested on the final-answer MathArena benchmark. It achieved a score of 50% on AIME and 29% on HMMT, and still needs to be tested on BRUMO, SMT, and CMIMC. The model runs on Azure's AI Foundry.
+We have selected the DeepSeek-V3-03-24 model, which hasn't been fully tested on the final-answer MathArena benchmark. It achieved a score of 50% on AIME and 29% on HMMT, and still needs to be tested on BRUMO, SMT, and CMIMC. The model runs on Azure's AI Foundry. First we were thinking to use DeepSeek-V3 which has similar attributes but we couldn't make the model work with Azure since it's a "retired model"
+
 
 ---
 
