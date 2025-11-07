@@ -53,7 +53,7 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 2.  **Critique (Verifier):** A new prompt is sent, instructing the LLM to adopt the Verifier role. It analyzes $\mathbf{S}_i$ and must output a **structured JSON** object:
     * **JSON Schema:** $`\{\text{"valid": bool, "error\_category": str, "critique\_summary": str}\}`$
     * **Error Categories:** The Verifier is guided to classify errors into: `CALCULATION_ERROR`, `CONCEPTUAL_FLAW`, or `LOGIC_OMISSION`.
-3.  **Correction (Planner/Prover):** If the Verifier outputs `valid: false`, the system parses the JSON. A final prompt is constructed, instructing the LLM to **incorporate the specific error category and critique summary** to generate a corrected solution $\mathbf{S}_{i+1}$.
+3.  **Correction (Planner/Solver):** If the Verifier outputs `valid: false`, the system parses the JSON. A final prompt is constructed, instructing the LLM to **incorporate the specific error category and critique summary** to generate a corrected solution $\mathbf{S}_{i+1}$.
 
 #### Evaluation
 * **Baseline:** Zero-shot Chain-of-Thought (CoT) performance of the chosen LLM on the MathArena test set.
@@ -78,7 +78,7 @@ The PCAF relies on a sequence of API calls to the single LLM, dynamically switch
 ### Organization within the Team
 
 * **[Member 1 Name]: Data Lead & Verifier Specialist.** Responsible for `main.ipynb` (data analysis, baseline setup), and designing the **Verifier's JSON schema** and critique prompts.
-* **[Member 2 Name]: Agent Architecture Lead & Prover Specialist.** Responsible for the overall **PCAF execution loop**, JSON parsing logic, and the Prover's core reasoning prompt design.
+* **[Member 2 Name]: Agent Architecture Lead & Solver Specialist.** Responsible for the overall **PCAF execution loop**, JSON parsing logic, and the Solver's core reasoning prompt design.
 * **[Member 3 Name]: Evaluation Lead & Planner Specialist.** Responsible for final MathArena evaluation pipeline, establishing the **Zero-Shot CoT baseline**, and designing the **Planner's corrective prompt logic**.
 
 
