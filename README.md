@@ -30,7 +30,7 @@ Since we are relying on **prompting**, these datasets serve as sources for **few
 | Dataset | Role in Project | Usage for Prompt Design/Evaluation |
 | :--- | :--- | :--- |
 | **MathArena** | **Evaluation & Baseline** | Used only for testing (the primary metric). |
-| **MathInstruct** | **Few-Shot Exemplar Source** | Manually transform a few complex problems into full, multi-turn PCAF traces (showing an error and correction) to embed directly in the system prompt. |
+| **MathInstruct** | **Few-Shot Example Source** | Manually transform a few complex problems into full, multi-turn PCAF traces (showing an error and correction) to embed directly in the system prompt. |
 | **NaturalProofs** | **Verifier Prompt Guidance** | Inform the design of the **Verifier Agent's system prompt** and the definitive **Error Categories** for structured JSON output. |
 
 
