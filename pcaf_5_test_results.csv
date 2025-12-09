@@ -1,0 +1,6 @@
+problem_idx,problem_type,ground_truth,pcaf_answer,is_correct,attempts_used,final_status,final_verifier_valid
+1,['Number Theory'],70,70,True,1,Verified,True
+2,['Geometry'],588,1198,False,3,Failed,False
+3,['Combinatorics'],16,16,True,1,Verified,True
+4,['Algebra'],117,33,False,1,Failed,True
+5,['Combinatorics' 'Number Theory'],279,279,True,1,Verified,True
