@@ -1,4 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/hgNAtOO3)
+![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)
 
 
 
@@ -17,6 +17,7 @@ Also inspired by these papers:
 
 1. **Targeted Performance Gain:** We provide a strong counter-measure to known LLM weaknesses (e.g., calculation errors, stubbornness in self-correction) by applying the PCAF to a model with a clear performance ceiling on Matharena's final-answer sub-sections (like AIME, HMMT, or CMIMC)
 2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure**, which uses sequential, role-specific prompts to force the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)** This simulates a high-quality, iterative self-refinement loop.
+2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure**, which uses sequential, role-specific prompts to force the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)**. This simulates a high-quality, iterative self-refinement loop.
 3. **Generalizability of Prompting:** By proving that this collaborative prompting architecture yields significant gains on a robust, uncontaminated benchmark like MathArena, we demonstrate the power of **structured context management** as a high-value technique independent of the model's size or specific training data.
 
 ---
@@ -90,5 +91,3 @@ Each component of this project—from dataset selection to architectural design 
 **The evaluation framework**, which compares PCAF’s performance to the baseline Zero-Shot CoT results, provides a clear, quantitative measure of improvement, allowing us to attribute accuracy gains directly to the proposed collaborative prompting structure.
 
 Through this integrated design, the PCAF serves as a targeted mechanism to elevate the reasoning reliability and final-answer accuracy of LLMs on MathArena’s final-answer sub-sections—achieving the core goal established at the outset of this project.
-
-
