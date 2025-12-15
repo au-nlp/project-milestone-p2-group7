@@ -1,0 +1,6 @@
+problem_idx,ground_truth,pcaf_answers,pcaf_scores,final_score
+1,103,"['103', '103', '103', '103']","[1, 1, 1, 1]",1.0
+2,3375,"['After thorough verification using two independent methods, we conclude that the only four-digit number satisfying the given condition is', '3375', '3375', '3375']","[0, 1, 1, 1]",0.75
+3,\frac{1}{576},"['576', '576', '\\dfrac{1}{576}', '576']","[0, 0, 1, 0]",0.25
+4,-984,"['-984', '-984', '-984', '-984']","[1, 1, 1, 1]",1.0
+5,890,"['9000', '100', '9000', '9000']","[0, 0, 0, 0]",0.0
