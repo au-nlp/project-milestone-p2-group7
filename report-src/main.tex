@@ -120,7 +120,7 @@
   and a Planner, which translates the critique into an explicit, non-negotiable MANDATORY ACTION instruction for the next attempt. 
   This architecture transforms the LLM's linear reasoning into a persistent self-correction mechanism. 
   Through systematic evaluation, we establish a robust baseline using Zero-Shot Chain-of-Thought (CoT) 
-  and demonstrate that the PCAF's structured intervention yields a significant uplift in final accuracy in comparison to the baseline (57.7\% versus 50.0\%), with a 37.4\% recovery rate confirming the efficacy of deterministic, architecture-driven reflection over traditional self-correction techniques.
+  and demonstrate that the PCAF's structured intervention yields a significant uplift in final accuracy in comparison to the baseline (51.3\% versus 39.6\%), with a 37.4\% recovery rate confirming the efficacy of deterministic, architecture-driven reflection over traditional self-correction techniques.
 \end{abstract}
 
 
@@ -297,7 +297,8 @@ often requiring multi-step reasoning that challenges standard Zero-Shot Chain-of
 \section{Results}
 \label{sec:results}
 
-Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to the standard one-shot approache used in MathArena. By aggregating performance across multiple independent runs, we observe that the system's collaborative loop effectively converts initial reasoning errors into successful solutions.
+Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to the standard one-shot approach defined in the benchmark's evaluation protocol \cite{MathArena2025}.
+By aggregating performance across multiple independent runs, we observe that the system's collaborative loop effectively converts initial reasoning errors into successful solutions.
 
 \subsection{Quantitative Performance}
 Table~\ref{tab:main_results} summarizes the performance metrics on the AIME 2025 and HMMT February 2025 datasets. We report the \textbf{Pass@4} accuracy (average score across 4 independent runs per problem) to account for generation variance.
@@ -342,7 +343,7 @@ We highlight a representative recovery trace from the HMMT dataset (Problem ID 1
 The results validate our hypothesis that separating the roles of generation (Solver) and auditing (Verifier) significantly enhances reliability in mathematical reasoning.
 
 \textbf{Efficacy of the ``Constitution of Verification''.} 
-The recovery rate of 37.4\% indicates that the rigid ``Constitution''—specifically the requirement that code output must match natural language reasoning—serves as an effective guardrail. In the HMMT case study, a standard Chain-of-Thought model would have halluincated the answer 82 without a mechanism to flag the missing factor. The \texttt{PersistentSolverSandbox} acted as an adversarial truth-grounding mechanism, forcing the model to confront the reality of its calculation errors.
+The recovery rate of 37.4\% indicates that the rigid ``Constitution''—specifically the requirement that code output must match natural language reasoning—serves as an effective guardrail. In the HMMT case study, a standard Chain-of-Thought model would have hallucinated the answer 82 without a mechanism to flag the missing factor. The \texttt{PersistentSolverSandbox} acted as an adversarial truth-grounding mechanism, forcing the model to confront the reality of its calculation errors.
 
 \textbf{The Planner's Deterministic Routing.} 
 Standard self-correction often fails because LLMs are ``stubborn,'' frequently repeating their initial error. The PCAF Planner overcomes this by translating vague Verifier critiques into mandatory, strategy-shifting instructions. The high success rate on AIME Number Theory tasks (where the Planner often forced a ``Brute Force'' check) suggests that deterministic strategy switching is more effective than open-ended ``try again'' prompting.
