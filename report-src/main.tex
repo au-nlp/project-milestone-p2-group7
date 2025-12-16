@@ -278,7 +278,8 @@ Reference PersistentSolverSandbox. Explain how you use a persistent Python envir
 \section{Experiments}
 \label{sec:experiments}
 
-To evaluate the efficacy of the Prompt-Based Collaborative Agent Framework (PCAF), we benchmarked the system on a subset of high-difficulty problems from the MathArena benchmark (AIME 2025 and HMMT February 2025). These datasets were selected for their complexity, often requiring multi-step reasoning that challenges standard Zero-Shot Chain-of-Thought (CoT) approaches.
+To evaluate the efficacy of the Prompt-Based Collaborative Agent Framework, we benchmarked the system on a subset of high-difficulty problems from the MathArena benchmark (AIME 2025 and HMMT February 2025). These datasets were selected for their complexity, 
+often requiring multi-step reasoning that challenges standard Zero-Shot Chain-of-Thought approaches as well as a comparison to the baseline.
 
 \subsection{Experimental Setup}
 
@@ -296,7 +297,7 @@ To evaluate the efficacy of the Prompt-Based Collaborative Agent Framework (PCAF
 \section{Results}
 \label{sec:results}
 
-Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to standard one-shot approaches. By aggregating performance across multiple independent runs, we observe that the system's collaborative loop effectively converts initial reasoning errors into successful solutions.
+Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to the standard one-shot approache used in MathArena. By aggregating performance across multiple independent runs, we observe that the system's collaborative loop effectively converts initial reasoning errors into successful solutions.
 
 \subsection{Quantitative Performance}
 Table~\ref{tab:main_results} summarizes the performance metrics on the AIME 2025 and HMMT February 2025 datasets. We report the \textbf{Pass@4} accuracy (average score across 4 independent runs per problem) to account for generation variance.
@@ -307,7 +308,7 @@ Table~\ref{tab:main_results} summarizes the performance metrics on the AIME 2025
   \centering
   \begin{tabular}{lcccc}
     \toprule
-    \textbf{Dataset} & \textbf{PCAF Accuracy} & \textbf{Avg. Turns} & \textbf{Recovery Rate} & \textbf{Baseline (Est.)} \\
+    \textbf{Dataset} & \textbf{PCAF Accuracy} & \textbf{Avg. Turns} & \textbf{Recovery Rate} & \textbf{Baseline} \\
     \midrule
     AIME 2025 (Subset)      & 56.7\% & 2.16 & 38.2\% & 50.0\% \\
     HMMT Feb '25 (Subset)   & 45.8\% & 2.47 & 36.6\% & 29.17\% \\
