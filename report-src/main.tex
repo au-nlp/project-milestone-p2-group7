@@ -141,13 +141,19 @@ A parallel line of inquiry involves distributing tasks among distinct, specializ
 \section{Methodology}
 
 \subsection{Framework Overview}
-Describe the iterative loop ($N=3$ max iterations).
-The PCAF is a deterministic, iterative, and closed-loop system designed to enforce self-correction and dual-verification. The process is initiated with the problem statement and runs for a maximum of $N=4$ total attempts (one initial attempt plus three retries). The core cycle involves three sequential steps:
-\\\textbf{1. Attempt (Solver):} The Solver generates a solution and its associated execution trace.
-\\\textbf{2. Verification (Verifier):} The Verifier audits the complete trace against a structured checklist and returns a structured critique.
-\\3. \textbf{Correction/Re-plan (Planner $\rightarrow$ Solver):} If the Verifier rejects the solution, the Planner translates the critique into an explicit, targeted instruction that overrides the Solver's default behavior, forcing a specific corrective action in the next attempt.The loop terminates successfully if the Verifier accepts the solution, or unsuccessfully if the maximum number of attempts is reached.
-\subsection{The Agents (Cite specific prompts from your code):}
-The framework's robustness derives from the dynamic specialization of the single LLM into three distinct agents via role-specific system prompts.
+The PCAF operates as a deterministic, closed-loop system designed to enforce self-correction. The architecture operates with a fixed budget of $T=4$ total turns (one initial generation followed by up to three correction cycles). 
+
+
+The core cycle involves three sequential steps:
+\begin{enumerate}
+    \item \textbf{Attempt (Solver):} The Solver generates a solution and a corresponding Python execution trace.
+    \item \textbf{Verification (Verifier):} The Verifier audits the trace against a structured checklist.
+    \item \textbf{Correction (Planner):} If the Verifier rejects the solution, the Planner translates the critique into a mandatory, actionable instruction for the next attempt.
+\end{enumerate}
+
+The system employs an \textbf{Early Stopping} mechanism: the loop terminates immediately if the Verifier outputs a valid signal, minimizing token usage.
+
+\subsection{The Agents}
 
 \subsubsection{The Solver}
 
@@ -173,61 +179,44 @@ for preventing numerical hallucinations.
 
 \subsubsection{The Verifier}
 
-The Verifier's role is that of a Skeptical Math Auditor
-(\texttt{VERIFIER\_ROLE}). It receives the Solver's full reasoning and code
-outputs and audits the solution based on a specific \textbf{Audit Checklist}
-(e.g., consistency between text and code, presence of the dual-method check,
-and logic trap checks).
-
-The Verifier is strictly constrained to output a structured JSON critique that
-adheres to a predefined schema:
+The Verifier's role is that of a Skeptical Math Auditor (\texttt{VERIFIER\_ROLE}). It receives the Solver's full reasoning and code outputs and audits the solution based on a strict checklist. To ensure the output is machine-parsable and deterministic, the Verifier is constrained via the LLM API's \textbf{JSON mode} (\texttt{response\_format=\{"type": "json\_object"\}}) to output a strict schema:
 
 \begin{quote}
-\texttt{\{JSON Schema:
-  "valid": bool,
-  "error\_type": str,
-  "critique": str
-\}}
+\begin{verbatim}
+{
+  "valid": boolean,
+  "error_type": "LOGIC_FLAW" | "VALUE_MISMATCH" | "METHOD_CONFLICT",
+  "critique": string
+}
+\end{verbatim}
 \end{quote}
 
-The \texttt{error\_type} field serves as the primary, discrete signal for the
-Planner, classifying failures into three key categories:
+The \texttt{error\_type} field serves as the primary signal for the Planner, classifying failures into three key categories:
 
 \begin{description}
   \item[\texttt{LOGIC\_FLAW}]
-  A fundamental error in the mathematical approach or application of a principle.
-
+  A fundamental error in the mathematical approach or application of a principle (e.g., misapplying the Principle of Inclusion-Exclusion or failing to handle edge cases like division by zero).
+  
   \item[\texttt{METHOD\_CONFLICT}]
-  The outputs of the two mandated methods (Analytical vs.\ Naive) did not match,
-  or the comparison step was skipped.
-
+  A direct contradiction between the two mandated methods. This flag is triggered if the Analytical derivation yields one result (e.g., 42) while the Naive Brute-Force simulation yields another (e.g., 40).
+  
   \item[\texttt{VALUE\_MISMATCH}]
-  The logic or code was mostly correct, but the final textual answer did not match
-  the computed output (e.g., failed to apply a final transformation like modulo
-  or rounding).
+  The Python code executed correctly, but the Solver's final textual conclusion ignored the code's output. This detects instances where the model ``hallucinates'' a preferred number despite contradictory empirical evidence from the sandbox.
 \end{description}
 
 \subsubsection{The Planner}
 
-The Planner is not a separate LLM call but rather a deterministic,
-heuristic driven function (\texttt{construct\_planner\_feedback}) that
-translates the Verifier's JSON rejection into a specific, high leverage
-instruction for the subsequent Solver attempt.
-
-The Planner's logic ensures that corrections are targeted and
-strategy shifting:
+The Planner is a deterministic function (\texttt{construct\_planner\_feedback}) that routes error signals into rigid instructional templates. Its primary goal is to break the ``reasoning inertia'' often observed in LLMs. The logic implements three routing strategies:
 
 \begin{description}
-  \item[\texttt{Targeted Reset for VALUE\_MISMATCH}]
-  If the \texttt{VALUE\_MISMATCH} flag is raised, the Planner generates an
-  instruction to ``Wipe memory of the `known' answer and re-derive it from
-  scratch using code.'' This counteracts the LLM’s tendency to stubbornly
-  repeat a flawed answer despite being shown the correct number in the trace.
-
-  \item[\texttt{Strategy Shift for CONCEPTUAL\_FLAW}]
-  For a conceptual failure in geometric problems, the Planner mandates a
-  shift, e.g., ``Switch to Coordinate Geometry. Place a vertex at (0,0) and
-  use the Shoelace Formula.''
+  \item[\texttt{Syntax Repair (for Runtime Errors)}]
+  If the execution trace contains runtime errors (captured via the sandbox's standard error buffer, e.g., \texttt{IndentationError} or \texttt{Timeout}) or fails to produce output, the Planner ignores the mathematical content entirely. Instead, it issues a strict syntax directive: ``Fix the syntax. Make the code run.''
+  
+  \item[\texttt{Protocol Reset (for VALUE\_MISMATCH)}]
+  To counteract the model's tendency to cling to a hallucinated number despite contradictory code output, this flag triggers a ``Memory Wipe.'' The Planner instructs the Solver to: ``Ignore your previous text intuition. It was wrong. Re-execute code and accept the output as truth.''
+  
+  \item[\texttt{General Critique Relay (for LOGIC\_FLAW / METHOD\_CONFLICT)}]
+  For fundamental reasoning errors or conflicts between the two methods, the Planner avoids enforcing rigid strategy shifts (e.g., forcing Coordinate Geometry), as experimentation showed this often led to the model attempting to ``game'' the system (hardcoding). Instead, it relays the Verifier's specific critique and mandates a resolution of the inconsistency between the text and the code.
 \end{description}
 
 This architecture ensures the correction loop is not a generic "try
@@ -238,35 +227,26 @@ again", but a precise, planned intervention.
 The execution of mathematical code is handled by a custom, stateful
 environment, the \texttt{PersistentSolverSandbox}. This tool is essential
 for providing verifiable grounding:
-\\ \textbf{Persistent Environment:}
+
+\textbf{Persistent Environment:}
   Unlike typical stateless code execution tools, the sandbox maintains
   its global state (\texttt{self.globals}) across consecutive code blocks
-  within a single Solver attempt. This enables complex, multiblock
+  within a single Solver attempt. This enables complex, multi-block
   workflows in which a function is defined in one block and then invoked
   or modified in subsequent blocks.
 
-\\ \textbf{Comprehensive Imports:}
+
+\textbf{Comprehensive Imports:}
   The sandbox is pre-loaded with essential mathematical and symbolic
   libraries (\texttt{math}, \texttt{sympy}, \texttt{numpy}) to support both
   analytical and naive solution methods.
 
-\\ \textbf{Robust I/O Capture:}
+
+\textbf{Robust I/O Capture:}
   The sandbox reliably captures all standard output (\texttt{stdout}) and
-  handles common runtime issues (e.g., infinite loops via timeouts,
+  handles common runtime issues (e.g., infinite loops via strict 20-second timeouts,
   \texttt{IndentationError}, and \texttt{SyntaxError}), returning any error
-  messages to the Solver as an \texttt{OBSERVATION}.
-  \\This feedback loop iscritical, as it allows the Solver to debug its own code syntax and execution failures.
-
-\\The Solver: Reference get_solver_prompt. Explain the "Two Strictly Different Methods" mandate (Analytical vs. Naive Brute Force) and the "Code First Mandate".
-
-
-
-The Verifier: Reference VERIFIER_ROLE and VERIFIER_JSON_SCHEMA. Explain how it acts as a "Skeptical Math Auditor" looking for specific error categories (LOGIC_FLAW, METHOD_CONFLICT, VALUE_MISMATCH).
-
-The Planner: Reference construct_planner_feedback. Explain the deterministic routing logic. Highlight how it translates a JSON error into a specific instruction (e.g., “If VALUE_MISMATCH -> Wipe memory, re-calculate”).
-
-Reference PersistentSolverSandbox. Explain how you use a persistent Python environment to maintain state variables between code blocks, handling imports (sympy, numpy) and capturing stdout.
-
+  messages to the Solver as an \texttt{OBSERVATION}. This feedback loop is critical, as it allows the Solver to debug its own code syntax and execution failures.
 \section{Experiments}
 \label{sec:experiments}
 
