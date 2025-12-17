@@ -111,16 +111,11 @@
   The inherent unreliability of Large Language Models (LLMs) in complex, multi-step calculations necessitates architectural 
   interventions to achieve trustworthy accuracy in mathematical reasoning. This paper introduces 
   the Prompt-Based Collaborative Agent Framework (PCAF), a novel, architecture-driven approach 
-  aimed at significantly improving final answer accuracy on the MathArena benchmark suite, including AIME, HMMT, BRUMO, SMT and CMIMC all for 2025.
+  aimed at significantly improving final answer accuracy on the MathArena benchmark suite, including AIME 2025, HMMT (Feb/Nov) 2025, BRUMO 2025, SMT 2025, and CMIMC 2025. 
   The method utilizes a single LLM instance (DeepSeek-V3-03-24) and employs sequential, 
-  role-specific prompting to simulate a sophisticated, three-agent collaborative system. 
-  The framework operates in a continuous, closed-loop refinement cycle 
-  defined by three specialized agents: a Solver, which generates the solution under a strict Dual-Method Verification 
-  and Code-First Mandate; a Verifier, which acts as a Skeptical Math Auditor to generate a structured JSON critique; 
-  and a Planner, which translates the critique into an explicit, non-negotiable MANDATORY ACTION instruction for the next attempt. 
+  role-specific prompting to simulate a sophisticated, three-agent collaborative system (Solver, Verifier, and Planner).
   This architecture transforms the LLM's linear reasoning into a persistent self-correction mechanism. 
-  Through systematic evaluation, we establish a robust baseline using Zero-Shot Chain-of-Thought (CoT) 
-  and demonstrate that the PCAF's structured intervention yields a significant uplift in final accuracy in comparison to the MathArena's baseline (51.3\% versus 39.6\%), with a 37.4\% recovery rate confirming the efficacy of deterministic, architecture-driven reflection over traditional self-correction techniques.
+  Through systematic evaluation across six distinct competition formats, we establish that the PCAF's structured intervention yields a significant uplift in global accuracy compared to the MathArena Zero-Shot CoT baseline (53.65\% versus 39.5\%), with a 36.1\% recovery rate confirming the efficacy of deterministic, architecture-driven reflection.
 \end{abstract}
 
 
