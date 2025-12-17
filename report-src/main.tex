@@ -238,32 +238,39 @@ again,'' but a precise, planned intervention.
 The execution of mathematical code is handled by a custom, stateful
 environment, the \texttt{PersistentSolverSandbox}. This tool is essential
 for providing verifiable grounding:
-\\ \textbf{Persistent Environment:}
+
+\textbf{Persistent Environment:}
   Unlike typical stateless code execution tools, the sandbox maintains
   its global state (\texttt{self.globals}) across consecutive code blocks
   within a single Solver attempt. This enables complex, multiblock
   workflows in which a function is defined in one block and then invoked
   or modified in subsequent blocks.
 
-\\ \textbf{Comprehensive Imports:}
+
+\textbf{Comprehensive Imports:}
   The sandbox is pre-loaded with essential mathematical and symbolic
   libraries (\texttt{math}, \texttt{sympy}, \texttt{numpy}) to support both
   analytical and naive solution methods.
 
-\\ \textbf{Robust I/O Capture:}
+
+\textbf{Robust I/O Capture:}
   The sandbox reliably captures all standard output (\texttt{stdout}) and
   handles common runtime issues (e.g., infinite loops via timeouts,
   \texttt{IndentationError}, and \texttt{SyntaxError}), returning any error
   messages to the Solver as an \texttt{OBSERVATION}.
   \\This feedback loop iscritical, as it allows the Solver to debug its own code syntax and execution failures.
 
+<<<<<<< HEAD
 \\The Solver: Reference get_solver_prompt. Explain the "Two Strictly Different Methods" mandate (Analytical vs. Naive Brute Force) and the "Code First Mandate".
+=======
+The Solver: Reference get\_solver\_prompt. Explain the "Two Strictly Different Methods" mandate (Analytical vs. Naive Brute-Force) and the "Code-First Mandate".
+>>>>>>> 4477580 (Fixed latex errors)
 
 
 
-The Verifier: Reference VERIFIER_ROLE and VERIFIER_JSON_SCHEMA. Explain how it acts as a "Skeptical Math Auditor" looking for specific error categories (LOGIC_FLAW, METHOD_CONFLICT, VALUE_MISMATCH).
+The Verifier: Reference VERIFIER\_ROLE and VERIFIER\_JSON\_SCHEMA. Explain how it acts as a "Skeptical Math Auditor" looking for specific error categories (LOGIC\_FLAW, METHOD\_CONFLICT, VALUE\_MISMATCH).
 
-The Planner: Reference construct_planner_feedback. Explain the deterministic routing logic. Highlight how it translates a JSON error into a specific instruction (e.g., “If VALUE_MISMATCH -> Wipe memory, re-calculate”).
+The Planner: Reference construct\_planner\_feedback. Explain the deterministic routing logic. Highlight how it translates a JSON error into a specific instruction (e.g., “If VALUE\_MISMATCH -> Wipe memory, re-calculate”).
 
 Reference PersistentSolverSandbox. Explain how you use a persistent Python environment to maintain state variables between code blocks, handling imports (sympy, numpy) and capturing stdout.
 
