@@ -130,13 +130,17 @@ The key contributions of this work are:
 \end{itemize}
 
 \section{Related Work}
-The Prompt-Based Collaborative Agent Framework (PCAF) is informed by two established and growing areas of research in LLMs: Reflective Reasoning and Verification and Multi-Agent Systems for Problem Solving.
+The Prompt-Based Collaborative Agent Framework (PCAF) is informed by two established and growing areas of research in LLMs: Reflective Reasoning and Verification, and Multi-Agent Systems.
+
 \subsection{Reflective Reasoning and Verification}
-Early methods in mathematical reasoning focused on generating a single, detailed Chain-of-Thought (CoT). However, recent work emphasizes enhancing reliability through self-critique. Approaches such as those presented by Wang et al. (2025) \cite{Wang2025MALoT}, who introduce a collaboration mechanism for long CoT reasoning, and Li et al. (2025) \cite{Li2025AutomatingProofs}, who explores LLM agents for automated proof generation using knowledge graphs, highlight the value of structured introspection. These systems often succeed in generating multiple solution paths or utilizing formal methods to check internal consistency. However, a common limitation is the nature of the corrective feedback; the system may identify an error but lack a dedicated, high-level mechanism to effectively re-plan the solution strategy. The feedback loop often remains constrained to simple re-prompts or voting systems.
+Early methods in mathematical reasoning focused on generating a single, detailed Chain-of-Thought (CoT). However, recent work emphasizes enhancing reliability through self-critique. Approaches such as \textbf{MA-LoT} by Wang et al. (2025) \cite{Wang2025MALoT} and \textbf{KG-Prover} by Li et al. (2025) \cite{Li2025AutomatingProofs}, which augments agents with knowledge graphs, highlight the value of structured introspection. These systems often succeed in generating multiple solution paths or utilizing formal methods to check internal consistency.
+However, a common limitation is \textit{reasoning inertia}; when a model critiques itself without external grounding, it often doubles down on its initial hallucination. 
+PCAF addresses this by introducing the \texttt{PersistentSolverSandbox}, enforcing that all self-corrections are grounded in executed code rather than purely linguistic introspection.
+
 
 \subsection{Multi-Agent Systems and Formal Verification}
-A parallel line of inquiry involves distributing tasks among distinct, specialized LLM instances to simulate collaborative environments. Works like Varambally et al. (2025) \cite{Varambally2025Hilbert}, which describe a system for recursively building formal proofs, employ specialized agents (a "formal prover" and a "critic") to ensure soundness. This multi-model approach is computationally powerful and minimizes agent bias but requires the coordination and hosting of multiple distinct models. Furthermore, when these systems interact with external tools, such as the formal prover used , the communication requires complex integration layers.
-
+A parallel line of inquiry involves distributing tasks among distinct, specialized LLM instances to simulate collaborative environments. Works like Varambally et al. (2025) \cite{Varambally2025Hilbert} employ specialized agents (e.g., a "formal prover" and a "critic") to ensure soundness. While computationally powerful, this multi-model approach requires complex orchestration and high inference costs.
+PCAF bridges this gap by simulating a multi-agent environment within a \textit{single} model context. By using role-specific prompting to switch between Solver, Verifier, and Planner personas, PCAF achieves the diversity benefits of multi-agent systems while maintaining the deployment simplicity of a single inference stream.
 
 \section{Methodology}
 
