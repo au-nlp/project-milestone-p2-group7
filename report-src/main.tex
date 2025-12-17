@@ -123,7 +123,7 @@
 
 The pursuit of reliable mathematical reasoning in Large Language Models (LLMs) is hindered by two persistent challenges: computational imprecision and stubbornness in self correction. While LLMs excel at generating coherent solution narratives (Chain of Thought), they frequently fail at the final, precise steps during arithmetic, algebra, and complex counting, which leads to high rates of final answer error on benchmarks like MathArena. Furthermore, models typically struggle to effectively diagnose and pivot from their initial logical errors, making standard self correction techniques unreliable.
 
-To overcome these limitations, this project implements the Prompt Based Collaborative Agent Framework (PCAF). Instead of relying on model fine tuning, PCAF utilizes an architecture driven reasoning approach. It simulates a multi-agent system within a single LLM instance through sequential, role-specific prompting. The framework dynamically cycles the LLM through three specialized roles. The Solver, the Verifier and the Planner which work in an iterative, closed loop refinement process. The core objective is to demonstrate that this structured collaborative architecture significantly increases the final answer accuracy and trustworthiness compared to the model's standard Zero-Shot baseline provided by MathArena.
+To overcome these limitations, this project implements the Prompt Based Collaborative Agent Framework (PCAF). Instead of relying on model fine tuning, PCAF utilizes an architecture driven reasoning approach. It simulates a multi-agent system within a single LLM instance through sequential, role specific prompting. The framework dynamically cycles the LLM through three specialized roles. The Solver, the Verifier and the Planner which work in an iterative, closed loop refinement process. The core objective is to demonstrate that this structured collaborative architecture significantly increases the final answer accuracy and trustworthiness compared to the model's standard Zero Shot baseline provided by MathArena.
 
 The key contributions of this work are:
 \begin{itemize}
@@ -273,8 +273,10 @@ Reference PersistentSolverSandbox. Explain how you use a persistent Python envir
 \section{Experiments}
 \label{sec:experiments}
 
-To evaluate the efficacy of the Prompt-Based Collaborative Agent Framework, we benchmarked the system on a subset of high-difficulty problems from the MathArena benchmark (AIME 2025 and HMMT February 2025). These datasets were selected for their complexity, 
-often requiring multi-step reasoning that challenges standard Zero-Shot Chain-of-Thought approaches as well as a comparison to the baseline.
+The central goal of these experiments is to quantitatively assess the performance gain of the PCAF architecture 
+relative to the standard MathArena baseline \cite{MathArena2025}. By applying PCAF to subsets where the baseline model 
+either has established scores (AIME, HMMT Feb) or there is no score available (BRUMO, SMT, CMIMC, HMMT Nov), 
+we establish a rigorous comparative framework to measure the impact of multi-agent collaboration on final-answer accuracy.
 
 \subsection{Experimental Setup}
 
@@ -292,11 +294,12 @@ often requiring multi-step reasoning that challenges standard Zero-Shot Chain-of
 \section{Results}
 \label{sec:results}
 
-Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to the Matharena's standard one-shot approach defined in the benchmark's evaluation protocol \cite{MathArena2025}.
-By aggregating performance across multiple independent runs, we observe that the system's collaborative loop effectively converts initial reasoning errors into successful solutions.
+As shown in Table \ref{tab:pcaf_results}, the PCAF architecture consistently outperforms the available MathArena baselines. 
+On the HMMT February subset, the model's accuracy improved from 29.0\% to 45.83\%, representing a 16.8\% absolute uplift. 
+Globally, the PCAF framework raised the model's average accuracy from 39.5\% to 53.65\%.
 
 \subsection{Quantitative Performance}
-Table~\ref{tab:main_results} summarizes the performance metrics on the AIME 2025 and HMMT February 2025 datasets. We report the \textbf{Pass@4} accuracy (average score across 4 independent runs per problem) to account for generation variance.
+Table~\ref{tab:pcaf_results} summarizes the performance metrics on the AIME 2025 and HMMT February 2025 datasets. We report the \textbf{Pass@4} accuracy (average score across 4 independent runs per problem) to account for generation variance.
 
 \begin{table}[h]
   \caption{Performance of PCAF vs. MathArena Baseline (DeepSeek-V3-03-24). 
@@ -320,15 +323,15 @@ Table~\ref{tab:main_results} summarizes the performance metrics on the AIME 2025
   \end{tabular}
 \end{table}
 
-The data highlights a significant "Verification Cost": on average, the system required 2.31 turns to reach a final answer. This latency confirms that the default Zero-Shot reasoning (Turn 1) is frequently insufficient for these high-complexity problems, necessitating the intervention of the Verifier and Planner.
+The data highlights a significant "Verification Cost": on average, the system required 2.24 turns to reach a final answer. This latency confirms that the default Zero-Shot reasoning (Turn 1) is frequently insufficient for these high-complexity problems, necessitating the intervention of the Verifier and Planner.
 
 \subsection{Resilience Analysis}
 A critical contribution of PCAF is its resilience. We define the \textit{Recovery Rate} as the proportion of successful runs where the system initially failed (Turn 1) but successfully self-corrected in subsequent turns.
 \begin{itemize}
     \item \textbf{One-Shot Success (Turn 1):} 62.6\% of correct answers were achieved immediately, typically on problems where the analytical derivation was flawless.
-    \item \textbf{Collaborative Recovery (Turns 2-4):} \textbf{37.4\%} of correct answers were "rescued" by the agent loop. Without the PCAF architecture, these instances would have been failures.
+    \item \textbf{Collaborative Recovery (Turns 2-4):} \textbf{36.1\%} of correct answers were "rescued" by the agent loop. Without the PCAF architecture, these instances would have been failures.
 \end{itemize}
-This 37.4\% recovery rate empirically validates the utility of the Planner's deterministic routing logic.
+This 36.1\% recovery rate empirically validates the utility of the Planner's deterministic routing logic.
 
 \subsection{Case Study: The "Double-Check" Effect}
 We highlight a representative recovery trace from the HMMT dataset (Problem ID 1: Sum of divisors of $9!$ ending in 1) to illustrate the framework's mechanics.
@@ -346,7 +349,7 @@ We highlight a representative recovery trace from the HMMT dataset (Problem ID 1
 The results validate our hypothesis that separating the roles of generation (Solver) and auditing (Verifier) significantly enhances reliability in mathematical reasoning.
 
 \textbf{Efficacy of the ``Constitution of Verification''.} 
-The recovery rate of 37.4\% indicates that the rigid ``Constitution''—specifically the requirement that code output must match natural language reasoning—serves as an effective guardrail. In the HMMT case study, a standard Chain-of-Thought model would have hallucinated the answer 82 without a mechanism to flag the missing factor. The \texttt{PersistentSolverSandbox} acted as an adversarial truth-grounding mechanism, forcing the model to confront the reality of its calculation errors.
+The recovery rate of 36.1\% indicates that the rigid ``Constitution''—specifically the requirement that code output must match natural language reasoning—serves as an effective guardrail. In the HMMT case study, a standard Chain-of-Thought model would have hallucinated the answer 82 without a mechanism to flag the missing factor. The \texttt{PersistentSolverSandbox} acted as an adversarial truth-grounding mechanism, forcing the model to confront the reality of its calculation errors.
 
 \textbf{The Planner's Deterministic Routing.} 
 Standard self-correction often fails because LLMs are ``stubborn,'' frequently repeating their initial error. The PCAF Planner overcomes this by translating vague Verifier critiques into mandatory, strategy-shifting instructions. The high success rate on AIME Number Theory tasks (where the Planner often forced a ``Brute Force'' check) suggests that deterministic strategy switching is more effective than open-ended ``try again'' prompting.
@@ -355,7 +358,11 @@ Standard self-correction often fails because LLMs are ``stubborn,'' frequently r
 While the system excelled in Algebra and Number Theory (56.7\% on AIME), qualitative analysis of failures reveals a weakness in Geometry. When the Solver attempted to parameterize complex shapes (e.g., AIME Problem 2) in Python, it often struggled to translate visual constraints into correct coordinate code. The Verifier correctly flagged inconsistencies, but the Planner lacked a visual modality to offer spatial correction, leading to loop exhaustion. This suggests that for geometric reasoning, the text-based code sandbox must be augmented with Vision-Language Models (VLMs).
 
 \section{Conclusion}
-We introduced the Prompt-Based Collaborative Agent Framework (PCAF), a modular architecture that transforms a single LLM into a self-correcting reasoning system. By orchestrating a Solver, Verifier, and Planner, we achieved a global accuracy of 51.3\% on difficult MathArena subsets, recovering over one-third of solutions that would have otherwise failed. Our findings confirm that architecture-driven reasoning—specifically the integration of deterministic planning and code-based verification—offers a viable path toward trustworthy mathematical AI.
+We introduced the Prompt-Based Collaborative Agent Framework as a targeted mechanism to improve the reliability of LLMs 
+on the MathArena benchmark. Our results prove that by moving from a linear baseline to a structured, architecture driven 
+collaborative loop, we can achieve a substantial accuracy uplift. With a global accuracy of 53.65\% and the 
+ability to recover over one-third of initial failures, PCAF demonstrates that architectural oversight is a 
+high value technique for transforming model performance on complex, competitive mathematical tasks.
 
 \bibliographystyle{plain}  % or ieee, alpha, acl, etc.
 \bibliography{references}
