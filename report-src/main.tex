@@ -120,15 +120,15 @@
   and a Planner, which translates the critique into an explicit, non-negotiable MANDATORY ACTION instruction for the next attempt. 
   This architecture transforms the LLM's linear reasoning into a persistent self-correction mechanism. 
   Through systematic evaluation, we establish a robust baseline using Zero-Shot Chain-of-Thought (CoT) 
-  and demonstrate that the PCAF's structured intervention yields a significant uplift in final accuracy in comparison to the baseline (51.3\% versus 39.6\%), with a 37.4\% recovery rate confirming the efficacy of deterministic, architecture-driven reflection over traditional self-correction techniques.
+  and demonstrate that the PCAF's structured intervention yields a significant uplift in final accuracy in comparison to the MathArena's baseline (51.3\% versus 39.6\%), with a 37.4\% recovery rate confirming the efficacy of deterministic, architecture-driven reflection over traditional self-correction techniques.
 \end{abstract}
 
 
 \section{Introduction}
 
-The pursuit of reliable mathematical reasoning in Large Language Models (LLMs) is hindered by two persistent challenges: computational imprecision and stubbornness in self-correction. While LLMs excel at generating coherent solution narratives (Chain-of-Thought), they frequently fail at the final, precise steps—arithmetic, algebra, and complex counting—which leads to high rates of final-answer error on benchmarks like MathArena. Furthermore, models typically struggle to effectively diagnose and pivot from their initial logical errors, making standard self-correction techniques unreliable.
+The pursuit of reliable mathematical reasoning in Large Language Models (LLMs) is hindered by two persistent challenges: computational imprecision and stubbornness in self correction. While LLMs excel at generating coherent solution narratives (Chain of Thought), they frequently fail at the final, precise steps during arithmetic, algebra, and complex counting, which leads to high rates of final answer error on benchmarks like MathArena. Furthermore, models typically struggle to effectively diagnose and pivot from their initial logical errors, making standard self correction techniques unreliable.
 
-To overcome these limitations, this project implements the Prompt-Based Collaborative Agent Framework (PCAF). Instead of relying on expensive model fine-tuning, PCAF utilizes an architecture-driven reasoning approach. It simulates a multi-agent system within a single LLM instance through sequential, role-specific prompting. The framework dynamically cycles the LLM through three specialized roles—Solver, Verifier, and Planner—in an iterative, closed-loop refinement process. The core objective is to demonstrate that this structured collaborative architecture significantly increases the final-answer accuracy and trustworthiness compared to the model's standard Zero-Shot baseline.
+To overcome these limitations, this project implements the Prompt Based Collaborative Agent Framework (PCAF). Instead of relying on model fine tuning, PCAF utilizes an architecture driven reasoning approach. It simulates a multi-agent system within a single LLM instance through sequential, role-specific prompting. The framework dynamically cycles the LLM through three specialized roles. The Solver, the Verifier and the Planner which work in an iterative, closed loop refinement process. The core objective is to demonstrate that this structured collaborative architecture significantly increases the final answer accuracy and trustworthiness compared to the model's standard Zero-Shot baseline provided by MathArena.
 
 The key contributions of this work are:
 \begin{itemize}
