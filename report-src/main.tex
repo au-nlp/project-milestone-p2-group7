@@ -111,7 +111,7 @@
   The inherent unreliability of Large Language Models (LLMs) in complex, multi-step calculations necessitates architectural 
   interventions to achieve trustworthy accuracy in mathematical reasoning. This paper introduces 
   the Prompt-Based Collaborative Agent Framework (PCAF), a novel, architecture-driven approach 
-  aimed at significantly improving final-answer accuracy on challenging benchmarks such as MathArena (including AIME 2025 and HMMT Feb 2025 subsets). 
+  aimed at significantly improving final answer accuracy on the MathArena benchmark suite, including AIME, HMMT, BRUMO, SMT and CMIMC all for 2025.
   The method utilizes a single LLM instance (DeepSeek-V3-03-24) and employs sequential, 
   role-specific prompting to simulate a sophisticated, three-agent collaborative system. 
   The framework operates in a continuous, closed-loop refinement cycle 
@@ -297,23 +297,31 @@ often requiring multi-step reasoning that challenges standard Zero-Shot Chain-of
 \section{Results}
 \label{sec:results}
 
-Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to the standard one-shot approach defined in the benchmark's evaluation protocol \cite{MathArena2025}.
+Our experiments on the MathArena benchmark demonstrate that the PCAF architecture yields a quantifiable improvement in reliability compared to the Matharena's standard one-shot approach defined in the benchmark's evaluation protocol \cite{MathArena2025}.
 By aggregating performance across multiple independent runs, we observe that the system's collaborative loop effectively converts initial reasoning errors into successful solutions.
 
 \subsection{Quantitative Performance}
 Table~\ref{tab:main_results} summarizes the performance metrics on the AIME 2025 and HMMT February 2025 datasets. We report the \textbf{Pass@4} accuracy (average score across 4 independent runs per problem) to account for generation variance.
 
 \begin{table}[h]
-  \caption{Performance of PCAF on MathArena Subsets. \textbf{Recovery Rate} denotes the percentage of correct solutions that required self-correction (Turns $>1$).}
-  \label{tab:main_results}
+  \caption{Performance of PCAF vs. MathArena Baseline (DeepSeek-V3-03-24). 
+  \textbf{Recovery Rate} denotes the percentage of successful solutions that initially failed on the first turn but were corrected by the agent loop.}
+  \label{tab:pcaf_results}
   \centering
   \begin{tabular}{lcccc}
     \toprule
-    \textbf{Dataset} & \textbf{Baseline} & \textbf{PCAF Accuracy} & \textbf{Avg. Turns} & \textbf{Recovery Rate} \\
+    \textbf{Competition Subset} & \textbf{Baseline (0-Shot)} & \textbf{PCAF Accuracy} & \textbf{Recovery Rate} & \textbf{Avg. Turns} \\
     \midrule
-    AIME 2025 (Subset)      & 50.0\% & 56.7\% & 2.16 & 38.2\% \\
-    HMMT Feb '25 (Subset)   & 29.17\% & 45.8\% & 2.47 & 36.6\% \\
+    AIME 2025               & 50.0\%  & 56.67\% & 29.5\% & 2.16 \\
+    BRUMO 2025              & N/A     & 65.83\% & 48.2\% & 1.91 \\
+    CMIMC 2025              & N/A     & 51.25\% & 41.6\% & 2.56 \\
+    HMMT Feb 2025           & 29.0\%  & 45.83\% & 35.0\% & 2.47 \\
+    HMMT Nov 2025           & N/A     & 46.67\% & 25.4\% & 2.28 \\
+    SMT 2025                & N/A     & 55.66\% & 36.7\% & 2.03 \\
+    \midrule
+    \textbf{Global Average} & \textbf{39.5\%*} & \textbf{53.65\%} & \textbf{36.1\%} & \textbf{2.24} \\
     \bottomrule
+    \multicolumn{5}{l}{\small{*Average calculated based on available benchmark data (AIME and HMMT Feb).}}
   \end{tabular}
 \end{table}
 
