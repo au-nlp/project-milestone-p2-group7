@@ -352,6 +352,11 @@ Ultimately, this work proves that for high-stakes reasoning tasks, a model's arc
 
 \newpage
 \appendix
+% 1. Force Section headers to say "Appendix A"
+\renewcommand{\thesection}{Appendix \Alph{section}}
+% 2. Force Subsection headers to just say "A.1" (Clean)
+\renewcommand{\thesubsection}{\Alph{section}.\arabic{subsection}}
+
 \section{System Prompts}
 \label{app:prompts}
 
@@ -514,15 +519,39 @@ code_str = code_str.replace("≥", ">=")
     \item \textbf{Final Answer:} 29.
 \end{itemize}
 
-\section {Geometry Case Study (AIME 2025, Problem 2)}
-The following case study illustrates the "Geometry Limitation" discussed in Section 6. It demonstrates how the text-based code sandbox failed to correctly parameterize a complex spatial arrangement (AIME 2025, Problem 2), leading to a persistent failure despite valid critiques.
+\section{Failure Case Study: Geometry (The ``Blind Spot'')}
+\label{app:geometry_failure}
 
-\textbf{Problem:} Point $M$ is the reflection of $D$ over $F$, and $N$ is the reflection of $G$ over $E$. Points lie on sides $AB$ and $AC$ of triangle $ABC$. Compute the area of heptagon $AFNBCEM$.
+\textit{While PCAF excels at Algebra, this case study from the AIME 2025 dataset (Problem 2) illustrates a structural limitation. In Run 2, the Solver hallucinated a spatial constraint that the text-based Verifier could only catch via logical deduction, not visual inspection.}
+
+\noindent\hrulefill
+
+\textbf{Problem (AIME I 2025, Problem 2):} Points $M$ and $N$ lie on sides $AB$ and $AC$ of $\triangle ABC$. A heptagon is formed by removing specific triangles. Given the area of $\triangle ABC$ is 588, determine the area of the heptagon.
 
 \vspace{0.5em}
 \textbf{TURN 0: Initial Attempt (Failure)}
 \begin{itemize}
-\item \textbf{Solver Strategy:} Used Coordinate Geometry with the Shoelace Formula (Method 1) and "Area by Parts" (Method 2).\item \textbf{Code Output:}\begin{itemize}\item Method 1 (Shoelace): Calculated area = \textbf{588}.\item Method 2 (Sum of Parts): Calculated area = \textbf{924}.\end{itemize}\item \textbf{Solver Hallucination:} The Solver noticed that the area of the entire triangle $ABC$ was also 588. Instead of realizing that a contained heptagon cannot equal the whole triangle, it rationalized the error:\item \textbf{Solver Text Reasoning:} ``Since the shoelace method gave 588 consistently, and the area of ABC is also 588, the heptagon must be equal to ABC... Method 2's higher result suggests an error in counting.''\item \textbf{Final Answer (Turn 0):} 588.\end{itemize}\vspace{0.5em}\textbf{VERIFICATION (The Critique)}\begin{itemize}\item \textbf{Verifier Verdict:} \texttt{INVALID}\item \textbf{Error Type:} \texttt{METHOD_CONFLICT}\item \textbf{Critique:} ``The shoelace method's result matches the area of triangle ABC, which is implausible since the heptagon should be a subset of ABC. The solver fails to recognize that the negative coordinates for point N imply a shape that does not align with the triangular boundary.''\end{itemize}\vspace{0.5em}\textbf{OUTCOME (Loop Exhaustion)}\begin{itemize}\item \textbf{Failure to Recover:} Unlike algebraic tasks, the Planner's instructions to "fix the coordinates" failed because the Solver lacked a visual modality to "see" that its vertex ordering ($A \to F \to N \dots$) created a self-intersecting polygon.\item \textbf{Result:} The system cycled through 3 more attempts, repeatedly guessing vertex orders, before finally failing. This case highlights the necessity of \textbf{Vision-Language Models (VLMs)} for complex geometric parameterization.\end{itemize}
+    \item \textbf{Solver Strategy:} Coordinate Geometry (Shoelace Formula).
+    \item \textbf{Code Output:} The code calculated an area of \textbf{588}.
+    \item \textbf{Solver Hallucination:} The Solver effectively guessed the answer was the same as the total area, justifying it with a spatial impossibility.
+    \item \textbf{Solver Text Reasoning:} ``Looking at the problem again, it's clear that the heptagon AFNBCEM is the entire triangle ABC. Therefore, the area is indeed 588.''
+    \item \textbf{Final Answer (Turn 0):} 588.
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{VERIFICATION (The Critique)}
+\begin{itemize}
+    \item \textbf{Verifier Verdict:} \texttt{INVALID}
+    \item \textbf{Error Type:} \texttt{LOGIC\_FLAW}
+    \item \textbf{Critique:} ``The solver's reasoning is flawed because they incorrectly concluded that the heptagon AFNBCEM has the same area as the entire triangle ABC. The heptagon should be a part of the triangle, not the whole triangle. The solver's repeated use of the shoelace formula without correctly identifying the vertices led to a logical error.''
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{OUTCOME (Loop Exhaustion)}
+\begin{itemize}
+    \item \textbf{Failure to Recover:} Because the Planner lacks a Vision-Language Model (VLM), it could not "show" the Solver why the heptagon was a subset. The Solver spent the next 3 turns randomly perturbing coordinates before failing.
+    \item \textbf{Note:} This is a ``Right Answer, Wrong Reason'' failure. The ground truth \textit{was} 588, but the Solver's claim that ``Heptagon = Triangle'' was semantically false (the Triangle area was likely larger in the problem's implicit geometry), causing the Verifier to rightly reject the reasoning.
+\end{itemize}
 
 \end{document}
 
