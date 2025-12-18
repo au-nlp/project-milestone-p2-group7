@@ -22,7 +22,7 @@ This repository is organized to separate the orchestration logic from the agent 
 ├── main.ipynb          # PRIMARY ENTRY POINT. Contains the main loop, evaluation logic, and data loading.
 ├── report.pdf          # Final project report (NeurIPS style).
 ├── README.md           # Project documentation.
-├── src/                # HELPER MODULES & AGENT LOGIC
+├── helpers/                # HELPER MODULES & AGENT LOGIC
 │   ├── agents.py       # Defines the interaction loop between Solver, Verifier, and Planner.
 │   ├── sandbox.py      # Implements the PersistentSolverSandbox for stateful execution.
 │   ├── utils.py        # Low-level utilities (API wrappers, answer extraction).
@@ -38,7 +38,7 @@ This repository is organized to separate the orchestration logic from the agent 
 
 1. **Clone the repository:**
 ```bash
-git clone [https://github.com/au-nlp/project-milestone-p2-group7.git](https://github.com/au-nlp/project-milestone-p2-group7.git)
+git clone https://github.com/au-nlp/project-milestone-p2-group7.git
 cd project-milestone-p2-group7
 
 ```
