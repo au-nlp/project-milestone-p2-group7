@@ -164,7 +164,7 @@ The PCAF architecture consistently outperforms the Zero-Shot CoT baseline across
 
 | Team Member | Contributions |
 | --- | --- |
-| **Fannar Freyr Jónuson** | Developed the `PersistentSolverSandbox` (`sandbox.py`) and safety wrappers; Implemented the evaluation pipeline and answer extraction logic (utils.py); Ran the final evaluation of all competitions. |
+| **Fannar Freyr Jónuson** | Developed the `PersistentSolverSandbox` (`sandbox.py`) and safety wrappers; Implemented the evaluation pipeline and answer extraction logic (utils.py); Ran the final evaluation of all competitions; Contributed to the report, mainly finalizing the Related Work, Methodology and wrote the Appendices. |
 | **[Member Name 2]** | Designed the Solver and Verifier system prompts (`prompts.py`); managed dataset ingestion and cleaning in `main.ipynb`; wrote the Methodology and Abstract sections of the report. |
 | **András Szabolcs Gyüre** | Implemented the iterative loop, FEW_SHOT_CORRECTION_EXAMPLES in utils.py, ran tests for AIME 2025, wrote the logic of the code in markdowns/comments, contributed in part of the report, e.g. Abstarct, Introduction, Related Work, Methodology, Experiments, Conclusion. |
 
