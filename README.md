@@ -15,14 +15,18 @@ This repository is organized to separate the orchestration logic from the agent 
 
 ```text
 ├── main.ipynb          # PRIMARY ENTRY POINT. Contains the main loop, evaluation logic, and data loading.
-├── agents.py           # Defines the interaction loop between Solver, Verifier, and Planner.
-├── sandbox.py          # Implements the PersistentSolverSandbox for stateful, secure Python execution.
-├── utils.py            # Low-level utilities (API wrappers, robust answer extraction, JSON parsing).
-├── prompts.py          # Contains system prompts, role definitions, and few-shot correction examples.
-├── config.py           # Configuration settings (API keys, model deployment names).
 ├── report.pdf          # Final project report (NeurIPS style).
-└── README.md           # Project documentation.
-
+├── README.md           # Project documentation.
+├── src/                # HELPER MODULES & AGENT LOGIC
+│   ├── agents.py       # Defines the interaction loop between Solver, Verifier, and Planner.
+│   ├── sandbox.py      # Implements the PersistentSolverSandbox for stateful execution.
+│   ├── utils.py        # Low-level utilities (API wrappers, answer extraction).
+│   ├── prompts.py      # System prompts, role definitions, and few-shot examples.
+│   └── config.py       # Configuration settings (API keys, deployment names).
+├── final_results/            # EXPERIMENTAL DATA
+│   └── *.csv           # Detailed CSV logs of the PCAF runs on MathArena competitions.
+└── report-src/      # DOCUMENTATION SOURCE
+    └── main.tex        # LaTeX source code for the final report.
 ```
 
 ## 🚀 Installation & Requirements
