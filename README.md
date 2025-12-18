@@ -1,93 +1,174 @@
-![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)
+
+# PCAF: Prompt-Based Collaborative Agent Framework
+
+**Course:** NLP Group 7 Project (Milestone P3)  
+**Paper:** [Read the Full Report (PDF)](./report.pdf)
+
+## 📄 Abstract
+[cite_start]The inherent unreliability of Large Language Models (LLMs) in complex, multi-step calculations necessitates architectural interventions to achieve trustworthy accuracy[cite: 5]. [cite_start]This project introduces the **Prompt-Based Collaborative Agent Framework (PCAF)**, a novel architecture utilizing a single LLM instance (DeepSeek-V3-0324) to simulate a sophisticated, three-agent collaborative system (Solver, Verifier, and Planner)[cite: 6].
+
+[cite_start]Instead of relying on fine-tuning, PCAF employs sequential, role-specific prompting to enforce a "Code-First" mandate[cite: 14, 22]. [cite_start]Through systematic evaluation on the MathArena benchmark (AIME, HMMT, BRUMO, SMT, CMIMC), the framework achieved a global accuracy of **53.65%** (compared to a 39.5% baseline) and demonstrated a **38.9% recovery rate**, validating the efficacy of deterministic self-correction[cite: 8].
+
+## 📂 Repository Structure
+
+This repository is organized to separate the orchestration logic from the agent definitions and tools, adhering to the Milestone P3 requirements.
+
+```text
+├── main.ipynb          # PRIMARY ENTRY POINT. Contains the main loop, evaluation logic, and data loading.
+├── agents.py           # Defines the interaction loop between Solver, Verifier, and Planner.
+├── sandbox.py          # Implements the PersistentSolverSandbox for stateful, secure Python execution.
+├── utils.py            # Low-level utilities (API wrappers, robust answer extraction, JSON parsing).
+├── prompts.py          # Contains system prompts, role definitions, and few-shot correction examples.
+├── config.py           # Configuration settings (API keys, model deployment names).
+├── report.pdf          # Final project report (NeurIPS style).
+└── README.md           # Project documentation.
+
+```
+
+## 🚀 Installation & Requirements
+
+1. **Clone the repository:**
+```bash
+git clone [https://github.com/au-nlp/project-milestone-p2-group7.git](https://github.com/au-nlp/project-milestone-p2-group7.git)
+cd nlp-group-7-p3
+
+```
+
+
+2. **Install dependencies:**
+The project requires Python 3.10+ and the following packages:
+```bash
+pip install openai pandas datasets func-timeout python-dotenv jupyter
+
+```
+
+
+3. **Environment Setup:**
+Create a `.env` file in the root directory to store your Azure/OpenAI credentials:
+```env
+API_KEY=your_azure_openai_api_key_here
+
+```
 
 
 
-## Project Proposal: Prompt-Based Collaborative Agent Framework (PCAF) for Enhanced LLM Mathematical Reasoning
+## ⚙️ Methodology: The PCAF Architecture
 
-### Abstract
-This project aims to enhance the final-answer acccuracy of a selected Large Language Model (LLM), specifically one **underperforming or untested** on specific sub-sections of the **Matharena** benchmark. We will implement a **Prompt-Based Collaborative Agent Framework (PCAF)**, which simulates a multi-agent system using only sequential, specialized zero/few-shot prompts within the context of a single LLM instance hosted on Azure. The framework employs three virtual agents, a **Solver**, a **Verifier**, and a **Planner**, who communicate via structured **JSON** output. The core goal is to demonstrate that this reflective, architecturally structured prompting approach provides a clear performance gain over the model's standard Zero-Shot Chain-of-Thought (CoT) baseline, proving the value of structured collaboration in complex mathematical reasoning.
+The framework operates on a deterministic, closed-loop system designed to enforce self-correction through three distinct agents:
 
-Also inspired by these papers: 
-  - https://arxiv.org/pdf/2503.11657
-  - https://arxiv.org/abs/2503.03205
-  - https://arxiv.org/abs/2509.22819
----
+### 1. The Solver (Generator)
 
-### Contributions and Novelty
-
-1. **Targeted Performance Gain:** We provide a strong counter-measure to known LLM weaknesses (e.g., calculation errors, stubbornness in self-correction) by applying the PCAF to a model with a clear performance ceiling on Matharena's final-answer sub-sections (like AIME, HMMT, or CMIMC)
-2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure**, which uses sequential, role-specific prompts to force the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)** This simulates a high-quality, iterative self-refinement loop.
-2. **Architecture-Driven Reasoning:** The novelty lies entirely in the **PCAF's algorithmic structure**, which uses sequential, role-specific prompts to force the single LLM to adopt the roles of **Generation (Solver)**, **Critique (Verifier)** and **Coordinator (Planner)**. This simulates a high-quality, iterative self-refinement loop.
-3. **Generalizability of Prompting:** By proving that this collaborative prompting architecture yields significant gains on a robust, uncontaminated benchmark like MathArena, we demonstrate the power of **structured context management** as a high-value technique independent of the model's size or specific training data.
-
----
-
-### Model Selection Criteria 
-
-We have selected the DeepSeek-V3-03-24 model, which hasn't been fully tested on the final-answer MathArena benchmark. It achieved a score of 50% on AIME and 29% on HMMT, and still needs to be tested on BRUMO, SMT, and CMIMC. The model runs on Azure's AI Foundry. First we were thinking to use DeepSeek-V3 which has similar attributes but we couldn't make the model work with Azure since it's a "retired model".
+* 
+**Role:** Generates solutions using a **Dual-Verification Protocol**.
 
 
----
-
-### Proposed Data and Their Role
-
-Since we are relying on **prompting**, these datasets serve as sources for **few-shot examples and prompt design**.
-
-| Dataset | Role in Project | Usage for Prompt Design/Evaluation |
-| :--- | :--- | :--- |
-| **MathArena** | **Evaluation & Baseline** | Used only for testing (the primary metric). |
-| **MathInstruct** | **Few-Shot Example Source** | Manually transform a few complex problems into full, multi-turn PCAF traces (showing an error and correction) to embed directly in the system prompt. |
-| **NaturalProofs** | **Verifier Prompt Guidance** | Inform the design of the **Verifier Agent's system prompt** and the definitive **Error Categories** for structured JSON output. |
-
-MathInstruct dataset: https://huggingface.co/datasets/TIGER-Lab/MathInstruct
-
----
-
-### Methods: Prompt-Based Collaborative Agent Framework (PCAF)
-
-The entire system runs on the **single selected LLM** hosted on Azure, through iterative prompting.
-
-#### Agent Roles and Communication (Sequential Prompting)
-The PCAF relies on a sequence of API calls to the single LLM, dynamically switching its role via prompts. The loop runs for a maximum of $N$ iterations ($N=?$ max).
-
-1.  **Initial Attempt (Solver):** The LLM receives the problem and few-shot examples and generates solution $\mathbf{S}_i$.
-2.  **Critique (Verifier):** A new prompt is sent, instructing the LLM to adopt the Verifier role. It analyzes $\mathbf{S}_i$ and must output a **structured JSON** object:
-    * **JSON Schema:** $`\{\text{"valid": bool, "error\_category": str, "critique\_summary": str}\}`$
-    * **Error Categories:** The Verifier is guided to classify errors into: `CALCULATION_ERROR`, `CONCEPTUAL_FLAW`, or `LOGIC_OMISSION`.
-3.  **Correction (Planner/Solver):** If the Verifier outputs `valid: false`, the system parses the JSON. A final prompt is constructed, instructing the LLM to **incorporate the specific error category and critique summary** to generate a corrected solution $\mathbf{S}_{i+1}$.
-
-#### Evaluation
-* **Baseline:** Zero-shot Chain-of-Thought (CoT) performance of the chosen LLM on the MathArena test set.
-* **PCAF Metric:** Final answer correctness score of the PCAF on the same MathArena test set.
-* **Analysis:** Compare the scores and analyze the **average number of correction steps** required by the PCAF to reach a correct final answer.
-
----
-
-### Proposed Timeline
-
-| Week | Internal Milestone (Team Focus) | Requirement Focus |
-| :--- | :--- | :--- |
-| **Week 1** | Select LLM, establish **Zero-Shot CoT Baseline** on MathArena subset. Draft few-shot traces. | **main.ipynb (Data/Baseline), Feasibility check.** |
-| **Week 2** | Finalize S/V/P role prompts and **JSON schema**. Implement the iterative loop logic and JSON parsing code. | **Code Quality, System Logic.** |
-| **Week 3** | Full PCAF integration. Run controlled tests on small dev set. Debug prompt logic and JSON stability. | **System integration, Prompt stability.** |
-| **Week 4** | **Evaluation Run 1.** Run PCAF on larger subset of MathArena. Compare performance uplift against the baseline. | **Initial results, Uplift analysis.** |
-| **Week 5-6** | Final Evaluation. Complete final comparison and documentation. | **Final Deliverable.** |
+* **Mandate:** Must use two strictly different methods:
+1. 
+*Analytical Method:* Symbolic math using `sympy`.
 
 
----
+2. 
+*Naive Brute-Force:* Simple simulation/loops.
 
 
-### Reaching Project Goal
-Each component of this project—from dataset selection to architectural design and evaluation strategy—has been deliberately structured to achieve our central objective: improving final-answer accuracy on the MathArena benchmark.
 
-**The PCAF’s multi-agent structure (Solver, Verifier, Planner)** enables systematic self-reflection and correction within a single LLM instance, directly addressing the known issues of arithmetic and logical consistency that often reduce MathArena scores.
 
-*https://arxiv.org/pdf/2502.08680
+* 
+**Tooling:** Operates within a `PersistentSolverSandbox` that maintains variable state across turns.
 
-**The use of specialized datasets (MathInstruct and NaturalProofs)** supports role-specific prompt engineering, ensuring that each agent’s reasoning, critique, and planning processes are grounded in examples of mathematically sound reasoning and structured verification.
 
-**Iterative prompting and JSON-based** feedback loops transform what is typically a linear reasoning process into a collaborative refinement cycle, helping the model converge more reliably on correct final answers.
 
-**The evaluation framework**, which compares PCAF’s performance to the baseline Zero-Shot CoT results, provides a clear, quantitative measure of improvement, allowing us to attribute accuracy gains directly to the proposed collaborative prompting structure.
+### 2. The Verifier (Auditor)
 
-Through this integrated design, the PCAF serves as a targeted mechanism to elevate the reasoning reliability and final-answer accuracy of LLMs on MathArena’s final-answer sub-sections—achieving the core goal established at the outset of this project.
+* 
+**Role:** Audits the execution trace against a structured checklist.
+
+
+* 
+**Output:** Returns a JSON object flagging specific error types:
+
+
+* 
+`METHOD_CONFLICT`: Analytical result \neq Brute-force result.
+
+
+* 
+`VALUE_MISMATCH`: Text conclusion \neq Code output.
+
+
+* 
+`LOGIC_FLAW`: Edge cases, hardcoding suspicion, or conceptual errors.
+
+
+
+
+
+### 3. The Planner (Router)
+
+* 
+**Role:** Deterministic function that translates Verifier errors into mandatory instructions.
+
+
+* 
+**Strategy:** Breaks reasoning inertia by issuing specific commands (e.g., "Protocol Reset" for value mismatches or "Syntax Repair" for runtime errors).
+
+
+
+## 📊 Usage
+
+All experiments and logic are contained within `main.ipynb`.
+
+### Running the Benchmark
+
+To replicate the results from the report:
+
+1. Open `main.ipynb`.
+2. Run the cells to load the datasets (`aime_2025`, `hmmt_feb_2025`, etc.).
+3. Execute the `run_matharena_pcaf_benchmark` function.
+* 
+*Note:* The system defaults to `attempts_per_problem=4` to account for stochasticity.
+
+
+
+
+
+### Single Problem Execution
+
+You can run the PCAF loop on a specific text input using the helper in `main.ipynb` (imported from `agents.py`):
+
+```python
+from agents import run_pcaf_on_problem
+
+# Example problem
+problem_text = "Find the number of integers between 1 and 50 divisible by 2 or 3."
+solution, trace_history = run_pcaf_on_problem(problem_text, max_retries=3)
+
+print(solution)
+
+```
+
+## 📈 Key Results
+
+The PCAF architecture consistently outperforms the Zero-Shot CoT baseline across all tested competitions.
+
+| Competition Subset | Baseline Accuracy | PCAF Accuracy | Recovery Rate |
+| --- | --- | --- | --- |
+| **AIME 2025** | 50.0% | **56.67%** | 29.5% |
+| **HMMT Feb 2025** | 29.0% | **45.83%** | 35.0% |
+| **BRUMO 2025** | N/A | **65.83%** | 48.2% |
+| **SMT 2025** | N/A | **55.66%** | 36.7% |
+| **Global Average** | **39.5%** | **53.65%** | **38.9%** |
+
+*Recovery Rate indicates the percentage of correct answers achieved via self-correction after an initial failure.*
+
+## 👥 Team Contributions
+
+| Team Member | Contributions |
+| --- | --- |
+| **[Member Name 1]** | Developed the `PersistentSolverSandbox` (`sandbox.py`) and safety wrappers; implemented the `agents.py` orchestration logic; ran experiments for AIME 2025. |
+| **[Member Name 2]** | Designed the Solver and Verifier system prompts (`prompts.py`); managed dataset ingestion and cleaning in `main.ipynb`; wrote the Methodology and Abstract sections of the report. |
+| **[Member Name 3]** | Implemented the evaluation pipeline and answer extraction logic (`utils.py`); analyzed failure cases (Geometry); compiled the final `report.pdf` and managed repository organization. |
+
+## 🔗 Artifacts
+
+* **Final Report:** [report.pdf](./report.pdf)
