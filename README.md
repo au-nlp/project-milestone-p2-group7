@@ -19,19 +19,20 @@ The inherent unreliability of Large Language Models (LLMs) in complex, multi ste
 This repository is organized to separate the orchestration logic from the agent definitions and tools, adhering to the Milestone P3 requirements.
 
 ```text
-├── main.ipynb          # PRIMARY ENTRY POINT. Contains the main loop, evaluation logic, and data loading.
-├── report.pdf          # Final project report (NeurIPS style).
-├── README.md           # Project documentation.
-├── helpers/                # HELPER MODULES & AGENT LOGIC
-│   ├── agents.py       # Defines the interaction loop between Solver, Verifier, and Planner.
-│   ├── sandbox.py      # Implements the PersistentSolverSandbox for stateful execution.
-│   ├── utils.py        # Low-level utilities (API wrappers, answer extraction).
-│   ├── prompts.py      # System prompts, role definitions, and few-shot examples.
-│   └── config.py       # Configuration settings (API keys, deployment names).
-├── final_results/            # EXPERIMENTAL DATA
-│   └── *.csv           # Detailed CSV logs of the PCAF runs on MathArena competitions.
-└── report-src/      # DOCUMENTATION SOURCE
-    └── main.tex        # LaTeX source code for the final report.
+├── main.ipynb             # PRIMARY ENTRY POINT. Contains the main loop, evaluation logic, and data loading.
+├── result_analysis.ipynb  # Analysis of the final results.  
+├── report.pdf             # Final project report (NeurIPS style).
+├── README.md              # Project documentation.
+├── helpers/                     # HELPER MODULES & AGENT LOGIC
+│   ├── agents.py          # Defines the interaction loop between Solver, Verifier, and Planner.
+│   ├── sandbox.py         # Implements the PersistentSolverSandbox for stateful execution.
+│   ├── utils.py           # Low-level utilities (API wrappers, answer extraction).
+│   ├── prompts.py         # System prompts, role definitions, and few-shot examples.
+│   └── config.py          # Configuration settings (API keys, deployment names).
+├── final_results/               # EXPERIMENTAL DATA
+│   └── *.csv              # Detailed CSV logs of the PCAF runs on MathArena competitions.
+└── report-src/         # DOCUMENTATION SOURCE
+    └── main.tex           # LaTeX source code for the final report.
 ```
 
 ## 🚀 Installation & Requirements
