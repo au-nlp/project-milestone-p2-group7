@@ -53,7 +53,7 @@ pip install openai pandas datasets func-timeout python-dotenv jupyter
 
 
 3. **Environment Setup:**
-Create a `.env` file in the root directory to store your Azure/OpenAI credentials:
+Create a `.env` file in the root directory to store your Azure/OpenAI credentials, and make sure to use DeepSeek-V3-03-24 LLM model:
 ```env
 API_KEY=your_azure_openai_api_key_here
 
