@@ -31,8 +31,8 @@ This repository is organized to separate the orchestration logic from the agent 
 │   └── config.py          # Configuration settings (API keys, deployment names).
 ├── final_results/               # EXPERIMENTAL DATA
 │   └── *.csv              # Detailed CSV logs of the PCAF runs on MathArena competitions.
-└── report-src/         # DOCUMENTATION SOURCE
-    └── main.tex           # LaTeX source code for the final report.
+└── report-src/            # DOCUMENTATION SOURCE
+    └── main.tex                 # LaTeX source code for the final report.
 ```
 
 ## 🚀 Installation & Requirements
