@@ -62,10 +62,10 @@ The framework operates on a deterministic, closed-loop system designed to enforc
 
 
 * **Mandate:** Must use two strictly different methods:
-1. *Analytical Method:* Symbolic math using `sympy`.
+    1. *Analytical Method:* Symbolic math using `sympy`.
 
 
-2. *Naive Brute-Force:* Simple simulation/loops.
+    2. *Naive Brute-Force:* Simple simulation/loops.
 
 
 
