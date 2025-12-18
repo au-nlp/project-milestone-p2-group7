@@ -148,15 +148,15 @@ print(solution)
 
 The PCAF architecture consistently outperforms the Zero-Shot CoT baseline across all tested competitions.
 
-| Competition Subset | Baseline Accuracy | PCAF Accuracy | Recovery Rate |
-| --- | --- | --- | --- |
-| **AIME 2025** | **50.0%** | **56.67%** | 29.5% |
-| **BRUMO 2025** | N/A | 65.83% | 48.2% |
-| **CMIMC 2025** | N/A | 51.25% | 41,6% |
-| **HMMT Feb 2025** | **29.0%** | **45.83%** | 35.0% |
-| **HMMT Nov 2025** | N/A | 46.67% | 25.4% |
-| **SMT 2025** | N/A | 55.66% | 36.7% |
-| **Global Average** | N/A| **53.65%** | **38.9%** |
+| Competition Subset | Baseline Accuracy | PCAF Accuracy | Recovery Rate | Avg. Turns |
+| --- | --- | --- | --- | --- |
+| **AIME 2025** | **50.0%** | **56.67%** | 29.5% | 2.16 |
+| **BRUMO 2025** | N/A | 65.83% | 48.2% | 1.91 |
+| **CMIMC 2025** | N/A | 51.25% | 41,6% | 2.56 |
+| **HMMT Feb 2025** | **29.0%** | **45.83%** | 35.0% | 2.47 |
+| **HMMT Nov 2025** | N/A | 46.67% | 25.4% | 2.28 |
+| **SMT 2025** | N/A | 55.66% | 36.7% | 2.03 |
+| **Global Average** | N/A| **53.65%** | **38.9%** | **2.24** |
 
 *Recovery Rate indicates the percentage of correct answers achieved via self-correction after an initial failure.*
 
