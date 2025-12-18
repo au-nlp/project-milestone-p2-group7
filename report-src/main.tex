@@ -294,14 +294,14 @@ On the HMMT Feb 2025 subset, the model's accuracy improved from 29.0\% to 45.83\
     \toprule
     \textbf{Competition Subset} & \textbf{Baseline (0-Shot)} & \textbf{PCAF Accuracy} & \textbf{Recovery Rate} & \textbf{Avg. Turns} \\
     \midrule
-    AIME 2025               & 50.0\%  & 56.67\% & 29.5\% & 2.16 \\
+    \textbf{AIME 2025}               & \textbf{50.0\%}  & \textbf{56.67\%} & 29.5\% & 2.16 \\
     BRUMO 2025              & N/A     & 65.83\% & 48.2\% & 1.91 \\
     CMIMC 2025              & N/A     & 51.25\% & 41.6\% & 2.56 \\
-    HMMT Feb 2025           & 29.0\%  & 45.83\% & 35.0\% & 2.47 \\
+    \textbf{HMMT Feb 2025}           & \textbf{29.0\%}  & \textbf{45.83\%} & 35.0\% & 2.47 \\
     HMMT Nov 2025           & N/A     & 46.67\% & 25.4\% & 2.28 \\
     SMT 2025                & N/A     & 55.66\% & 36.7\% & 2.03 \\
     \midrule
-    \textbf{Global Average} & \textbf{N/A} & \textbf{53.65\%} & \textbf{38.9\%} & \textbf{2.24} \\
+    \textbf{Global Average} & {N/A} & {53.65\%} & \textbf{38.9\%} & \textbf{2.24} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -514,4 +514,15 @@ code_str = code_str.replace("≥", ">=")
     \item \textbf{Final Answer:} 29.
 \end{itemize}
 
+\section {Geometry Case Study (AIME 2025, Problem 2)}
+The following case study illustrates the "Geometry Limitation" discussed in Section 6. It demonstrates how the text-based code sandbox failed to correctly parameterize a complex spatial arrangement (AIME 2025, Problem 2), leading to a persistent failure despite valid critiques.
+
+\textbf{Problem:} Point $M$ is the reflection of $D$ over $F$, and $N$ is the reflection of $G$ over $E$. Points lie on sides $AB$ and $AC$ of triangle $ABC$. Compute the area of heptagon $AFNBCEM$.
+
+\vspace{0.5em}
+\textbf{TURN 0: Initial Attempt (Failure)}
+\begin{itemize}
+\item \textbf{Solver Strategy:} Used Coordinate Geometry with the Shoelace Formula (Method 1) and "Area by Parts" (Method 2).\item \textbf{Code Output:}\begin{itemize}\item Method 1 (Shoelace): Calculated area = \textbf{588}.\item Method 2 (Sum of Parts): Calculated area = \textbf{924}.\end{itemize}\item \textbf{Solver Hallucination:} The Solver noticed that the area of the entire triangle $ABC$ was also 588. Instead of realizing that a contained heptagon cannot equal the whole triangle, it rationalized the error:\item \textbf{Solver Text Reasoning:} ``Since the shoelace method gave 588 consistently, and the area of ABC is also 588, the heptagon must be equal to ABC... Method 2's higher result suggests an error in counting.''\item \textbf{Final Answer (Turn 0):} 588.\end{itemize}\vspace{0.5em}\textbf{VERIFICATION (The Critique)}\begin{itemize}\item \textbf{Verifier Verdict:} \texttt{INVALID}\item \textbf{Error Type:} \texttt{METHOD_CONFLICT}\item \textbf{Critique:} ``The shoelace method's result matches the area of triangle ABC, which is implausible since the heptagon should be a subset of ABC. The solver fails to recognize that the negative coordinates for point N imply a shape that does not align with the triangular boundary.''\end{itemize}\vspace{0.5em}\textbf{OUTCOME (Loop Exhaustion)}\begin{itemize}\item \textbf{Failure to Recover:} Unlike algebraic tasks, the Planner's instructions to "fix the coordinates" failed because the Solver lacked a visual modality to "see" that its vertex ordering ($A \to F \to N \dots$) created a self-intersecting polygon.\item \textbf{Result:} The system cycled through 3 more attempts, repeatedly guessing vertex orders, before finally failing. This case highlights the necessity of \textbf{Vision-Language Models (VLMs)} for complex geometric parameterization.\end{itemize}
+
 \end{document}
+
