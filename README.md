@@ -114,8 +114,7 @@ To replicate the results from the report:
 1. Open `main.ipynb`.
 2. Run the cells to load the datasets (`aime_2025`, `hmmt_feb_2025`, etc.).
 3. Execute the `run_matharena_pcaf_benchmark` function.
-* 
-*Note:* The system defaults to `attempts_per_problem=4` to account for stochasticity.
+* *Note:* The system defaults to `attempts_per_problem=4` to account for stochasticity.
 
 
 
