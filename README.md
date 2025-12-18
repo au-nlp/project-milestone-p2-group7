@@ -58,46 +58,37 @@ The framework operates on a deterministic, closed-loop system designed to enforc
 
 ### 1. The Solver (Generator)
 
-* 
-**Role:** Generates solutions using a **Dual-Verification Protocol**.
+* **Role:** Generates solutions using a **Dual-Verification Protocol**.
 
 
 * **Mandate:** Must use two strictly different methods:
-1. 
-*Analytical Method:* Symbolic math using `sympy`.
+1. *Analytical Method:* Symbolic math using `sympy`.
 
 
-2. 
-*Naive Brute-Force:* Simple simulation/loops.
+2. *Naive Brute-Force:* Simple simulation/loops.
 
 
 
 
-* 
-**Tooling:** Operates within a `PersistentSolverSandbox` that maintains variable state across turns.
+* **Tooling:** Operates within a `PersistentSolverSandbox` that maintains variable state across turns.
 
 
 
 ### 2. The Verifier (Auditor)
 
-* 
-**Role:** Audits the execution trace against a structured checklist.
+* **Role:** Audits the execution trace against a structured checklist.
 
 
-* 
-**Output:** Returns a JSON object flagging specific error types:
+* **Output:** Returns a JSON object flagging specific error types:
 
 
-* 
-`METHOD_CONFLICT`: Analytical result \neq Brute-force result.
+* `METHOD_CONFLICT`: Analytical result \neq Brute-force result.
 
 
-* 
-`VALUE_MISMATCH`: Text conclusion \neq Code output.
+* `VALUE_MISMATCH`: Text conclusion \neq Code output.
 
 
-* 
-`LOGIC_FLAW`: Edge cases, hardcoding suspicion, or conceptual errors.
+* `LOGIC_FLAW`: Edge cases, hardcoding suspicion, or conceptual errors.
 
 
 
@@ -105,12 +96,10 @@ The framework operates on a deterministic, closed-loop system designed to enforc
 
 ### 3. The Planner (Router)
 
-* 
-**Role:** Deterministic function that translates Verifier errors into mandatory instructions.
+* **Role:** Deterministic function that translates Verifier errors into mandatory instructions.
 
 
-* 
-**Strategy:** Breaks reasoning inertia by issuing specific commands (e.g., "Protocol Reset" for value mismatches or "Syntax Repair" for runtime errors).
+* **Strategy:** Breaks reasoning inertia by issuing specific commands (e.g., "Protocol Reset" for value mismatches or "Syntax Repair" for runtime errors).
 
 
 
