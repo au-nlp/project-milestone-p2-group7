@@ -7,7 +7,7 @@
 % The authors should use one of these tracks.
 % Before accepting by the NeurIPS conference, select one of the options below.
 % 0. "default" for submission
- \usepackage[preprint]{neurips_2025}
+ \usepackage[final]{neurips_2025}
 % the "default" option is equal to the "main" option, which is used for the Main Track with double-blind reviewing.
 % 1. "main" option is used for the Main Track
 %  \usepackage[main]{neurips_2025}
@@ -80,6 +80,16 @@
   Department of Computer Science\\
   Aarhus University\\
   \texttt{au802942@uni.au.dk} \\
+  \And
+  Fannar Freyr Jónuson \\
+  Department of Computer Science\\
+  Aarhus University\\
+  \texttt{au803262@uni.au.dk} \\
+  \And
+  András Szabolcs Gyüre \\
+  Department of Computer Science\\
+  Aarhus University\\
+  \texttt{au803280@uni.au.dk} \\
   % examples of more authors
   % \And
   % Coauthor \\
@@ -118,7 +128,7 @@
   The method utilizes a single LLM instance (DeepSeek-V3-03-24) and employs sequential, 
   role specific prompting to simulate a sophisticated, three agent collaborative system (Solver, Verifier, and Planner).
   This architecture transforms the LLM's linear reasoning into a persistent self correction mechanism. 
-  Through systematic evaluation across six distinct competition formats, we establish that the PCAF's structured intervention yields a significant uplift in global accuracy compared to the MathArena Zero Shot CoT baseline (53.65\% versus 39.5\%), with a 38.9\% recovery rate confirming the efficacy of deterministic, architecture driven reflection.
+  Through systematic evaluation across six distinct competition formats, we demonstrate that PCAF yields a significant accuracy uplift over the MathArena Zero-Shot CoT baseline, specifically improving scores from 50.0\% to 56.67\% on AIME 2025 and from 29.0\% to 45.83\% on HMMT Feb 2025. A global recovery rate of 38.9\% across all benchmarks confirms the efficacy of deterministic, architecture-driven reflection in transforming initial logical failures into verified successes.
 \end{abstract}
 
 
@@ -274,7 +284,7 @@ we establish a rigorous comparative framework to measure the impact of multiagen
 
 \subsection{Experimental Setup}
 
-\textbf{Implementation.} The framework utilizes the \texttt{DeepSeek-V3-0324} model hosted on Azure OpenAI. The architecture consists of three specialized agents. The Solver, the Verifier and the Planner, all operating within a single LLM context. A key component is the Solver's \texttt{PersistentSolverSandbox}, which maintains variable state across turns to allow for iterative code refinement.
+\textbf{Implementation.} The framework utilizes the \texttt{DeepSeek-V3-03-24} model hosted on Azure OpenAI. The architecture consists of three specialized agents. The Solver, the Verifier and the Planner, all operating within a single LLM context. A key component is the Solver's \texttt{PersistentSolverSandbox}, which maintains variable state across turns to allow for iterative code refinement.
 
 \textbf{Evaluation Protocol.} To account for the stochastic nature of LLMs, we adopted a robust evaluation strategy. For each problem in the test set, we performed $K=4$ independent runs of the full PCAF loop. The reported accuracy for a problem is the average success rate across these runs ($Score \in [0.0, 1.0]$).
 
