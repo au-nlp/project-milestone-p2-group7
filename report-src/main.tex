@@ -545,7 +545,9 @@ code_str = code_str.replace("≥", ">=")
 
 \noindent\hrulefill
 
-\textbf{Problem (AIME I 2025, Problem 2):} Points $M$ and $N$ lie on sides $AB$ and $AC$ of $\triangle ABC$. A heptagon is formed by removing specific triangles. Given the area of $\triangle ABC$ is 588, determine the area of the heptagon.
+\textbf{Problem (AIME 2025, Problem 2):} On $triangle ABC$ points $A, D, E$, and $B$ lie in that order on side $\overline{AB}$ with $AD = 4$, $DE = 16$, $EB = 8$. Points $A, F, G$ and $C$ lie in that order on side $\overline{AC}$ with $AF = 13$, $FG = 52$, and $GC = 26$. Let $M$ be the reflection of $D$ through $F$, and let $N$ be the reflection of $G$ through $E$. Quadrilateral $DEGF$ has area $288$. Find the area of heptagon $AFNBCEM$.
+
+
 
 \vspace{0.5em}
 \textbf{TURN 0: Initial Attempt (Failure)}
@@ -568,7 +570,7 @@ code_str = code_str.replace("≥", ">=")
 \vspace{0.5em}
 \textbf{OUTCOME (Loop Exhaustion)}
 \begin{itemize}
-    \item \textbf{Failure to Recover:} Because the Planner lacks a Vision-Language Model (VLM), it could not "show" the Solver why the heptagon was a subset. The Solver spent the next 3 turns randomly perturbing coordinates before failing.
+    \item \textbf{Failure to Recover:} Because the Planner lacks a Vision Language Model (VLM), it could not "show" the Solver why the heptagon was a subset. The Solver spent the next 3 turns randomly perturbing coordinates before failing.
     \item \textbf{Note:} This is a ``Right Answer, Wrong Reason'' failure. The ground truth \textit{was} 588, but the Solver's claim that ``Heptagon = Triangle'' was semantically false (the Triangle area was likely larger in the problem's implicit geometry), causing the Verifier to rightly reject the reasoning.
 \end{itemize}
 
