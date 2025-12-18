@@ -55,10 +55,6 @@
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}         % colors
 \usepackage{amsmath}
-\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}} % Fixes U+2248 (≈)
-\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}    % Fixes U+2260 (≠)
-\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}    % Fixes U+2264 (≤)
-\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}    % Fixes U+2265 (≥)
 
 % Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote. 
 \title{Prompt-Based Collaborative Agent Framework (PCAF) for Enhanced LLM Mathematical Reasoning}
@@ -260,7 +256,7 @@ for providing verifiable grounding:
 
 The central goal of these experiments is to quantitatively assess the performance gain of the PCAF architecture 
 relative to the standard MathArena baseline. By applying PCAF to subsets where the baseline model 
-either has established scores (AIME, HMMT Feb) or there is no score available (BRUMO, SMT, CMIMC, HMMT Nov), 
+either has established scores (AIME 2025, HMMT Feb 2025) or there is no score available (BRUMO 2025, SMT 2025, CMIMC 2025, HMMT Nov 2025), 
 we establish a rigorous comparative framework to measure the impact of multiagent collaboration on final answer accuracy.
 
 \subsection{Experimental Setup}
@@ -279,9 +275,10 @@ we establish a rigorous comparative framework to measure the impact of multiagen
 \section{Results}
 \label{sec:results}
 
-As shown in Table \ref{tab:pcaf_results}, the PCAF architecture consistently outperforms the available MathArena baselines. 
-On the HMMT February subset, the model's accuracy improved from 29.0\% to 45.83\%, representing a 16.8\% uplift. 
-Globally, the PCAF framework raised the model's average accuracy from 39.5\% to 53.65\%.
+As shown in Table \ref{tab:pcaf_results}, the PCAF architecture consistently outperforms the available MathArena baselines.
+On the AIME 2025 competition our model's framework raised the accuracy from 50.0\% to 56.67\%
+On the HMMT Feb 2025 subset, the model's accuracy improved from 29.0\% to 45.83\%, representing a 16.8\% uplift. 
+
 
 \begin{table}[h]
   \caption{Performance of PCAF vs. MathArena Baseline (DeepSeek-V3-03-24). 
@@ -299,9 +296,8 @@ Globally, the PCAF framework raised the model's average accuracy from 39.5\% to 
     HMMT Nov 2025           & N/A     & 46.67\% & 25.4\% & 2.28 \\
     SMT 2025                & N/A     & 55.66\% & 36.7\% & 2.03 \\
     \midrule
-    \textbf{Global Average} & \textbf{39.5\%*} & \textbf{53.65\%} & \textbf{38.9\%} & \textbf{2.24} \\
+    \textbf{Global Average} & \textbf{N/A} & \textbf{53.65\%} & \textbf{38.9\%} & \textbf{2.24} \\
     \bottomrule
-    \multicolumn{5}{l}{\small{*Average calculated based on available benchmark data (AIME and HMMT Feb).}}
   \end{tabular}
 \end{table}
 
@@ -316,7 +312,7 @@ A critical contribution of PCAF is its resilience.
 This 38.9\% recovery rate empirically validates the utility of the Planner's deterministic routing logic.
 
 \subsection{Case Study: The "Double Check" Effect}
-We highlight a representative recovery trace from the HMMT dataset (Problem ID 1: Sum of divisors of $9!$ ending in 1) to illustrate the framework's mechanics.
+We highlight a representative recovery trace from the HMMT Feb 2025 dataset (Problem ID 1: Sum of divisors of $9!$ ending in 1) to illustrate the framework's mechanics.
 
 \begin{itemize}
     \item \textbf{Initial Failure (Solver):} The Solver analytically derived divisors $\{1, 81\}$ (Sum: 82), missing the combination $3 \times 7 = 21$.
@@ -331,20 +327,20 @@ We highlight a representative recovery trace from the HMMT dataset (Problem ID 1
 The results validate our hypothesis that separating the roles of generation (Solver) and auditing (Verifier) significantly enhances reliability in mathematical reasoning.
 
 \textbf{Efficacy of the "Constitution of Verification".} 
-The recovery rate of 38.9\% indicates that the rigid "Constitution" specifically the requirement that code output must match natural language reasoning serves as an effective guardrail. In the HMMT case study, a standard CoT model would have hallucinated the answer 82 without a mechanism to flag the missing factor. The \texttt{PersistentSolverSandbox} acted as an adversarial truth grounding mechanism, forcing the model to confront the reality of its calculation errors.
+The recovery rate of 38.9\% indicates that the rigid "Constitution" specifically the requirement that code output must match natural language reasoning serves as an effective guardrail. In the HMMT Feb 2025 case study, a standard CoT model would have hallucinated the answer 82 without a mechanism to flag the missing factor. The \texttt{PersistentSolverSandbox} acted as an adversarial truth grounding mechanism, forcing the model to confront the reality of its calculation errors.
 
 \textbf{The Planner's Deterministic Routing.} 
-Standard self correction often fails because LLMs are "stubborn" frequently repeating their initial error. The PCAF Planner overcomes this by translating vague Verifier critiques into mandatory, strategy shifting instructions. The high success rate on AIME Number Theory tasks (where the Planner often forced a "Brute Force" check) suggests that deterministic strategy switching is more effective than open ended "try again" prompting.
+Standard self correction often fails because LLMs are "stubborn" frequently repeating their initial error. The PCAF Planner overcomes this by translating vague Verifier critiques into mandatory, strategy shifting instructions. The high success rate on AIME 2025 Number Theory tasks (where the Planner often forced a "Brute Force" check) suggests that deterministic strategy switching is more effective than open ended "try again" prompting.
 
 \textbf{Limitations in Geometry.}
-While the system excelled in Algebra and Number Theory (56.7\% on AIME), qualitative analysis of failures reveals a weakness in Geometry. When the Solver attempted to parameterize complex shapes (e.g., AIME Problem 2) in Python, it often struggled to translate visual constraints into correct coordinate code. The Verifier correctly flagged inconsistencies, but the Planner lacked a visual modality to offer spatial correction, leading to loop exhaustion. This suggests that for geometric reasoning, the text based code sandbox must be augmented with Vision Language Models (VLMs).
+While the system excelled in Algebra and Number Theory (56.7\% on AIME 2025), qualitative analysis of failures reveals a weakness in Geometry. When the Solver attempted to parameterize complex shapes (e.g., AIME 2025 Problem 2) in Python, it often struggled to translate visual constraints into correct coordinate code. The Verifier correctly flagged inconsistencies, but the Planner lacked a visual modality to offer spatial correction, leading to loop exhaustion. This suggests that for geometric reasoning, the text based code sandbox must be augmented with Vision Language Models (VLMs).
 
 \section{Conclusion}
-We introduced the Prompt Based Collaborative Agent Framework as a targeted mechanism to improve the reliability of LLMs 
-on the MathArena benchmark. Our results prove that by moving from a linear baseline to a structured, architecture driven 
-collaborative loop, we can achieve a substantial accuracy uplift. With a global accuracy of 53.65\% and the 
-ability to recover over one third of initial failures, PCAF demonstrates that architectural oversight is a 
-high value technique for transforming model performance on complex, competitive mathematical tasks.
+The results of this study validate the Prompt-Based Collaborative Agent Framework (PCAF) as a successful architectural intervention for complex mathematical reasoning. By transitioning from a linear, single-inference process to a modular Solver-Verifier-Planner loop, we have demonstrated that the hallucination and stubbornness inherent in modern Large Language Models (LLMs) are not immutable traits, but can be managed through structured collaboration.
+
+The primary success of the PCAF lies in its ability to enforce Grounding. While standard Chain-of-Thought (CoT) models often succumb to linguistic intuition. The high recovery rate observed in our experiments confirms that the framework’s deterministic correction logic effectively rescues solutions that would otherwise fail under standard conditions.
+
+Ultimately, this work proves that for high-stakes reasoning tasks, a model's architecture is as critical as its scale. While the observed limitations in Geometry suggest that a purely text-based sandbox may eventually require visual-modality integration, the current PCAF provides a reliable and transparent blueprint for creating more trustworthy autonomous agents. For researchers and developers aiming to deploy LLMs in technical domains, the PCAF offers a path toward a zero-trust reasoning paradigm where every logic step is critiqued, verified, and, if necessary, strategically corrected.
 
 \bibliographystyle{plain}  % or ieee, alpha, acl, etc.
 \bibliography{references}
