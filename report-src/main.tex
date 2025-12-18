@@ -123,7 +123,7 @@
 \begin{abstract}
   The inherent unreliability of Large Language Models (LLMs) in complex, multi step calculations necessitates architectural 
   interventions to achieve trustworthy accuracy in mathematical reasoning. This paper introduces 
-  the Prompt Based Collaborative Agent Framework (PCAF), a novel, architecture driven approach 
+  the Prompt-Based Collaborative Agent Framework (PCAF), a novel, architecture driven approach 
   aimed at significantly improving final answer accuracy on the MathArena benchmark suite, including AIME 2025, HMMT (Feb/Nov) 2025, BRUMO 2025, SMT 2025, and CMIMC 2025.
   The method utilizes a single LLM instance (DeepSeek-V3-03-24) and employs sequential, 
   role specific prompting to simulate a sophisticated, three agent collaborative system (Solver, Verifier, and Planner).
@@ -136,7 +136,7 @@
 
 The pursuit of reliable mathematical reasoning in Large Language Models is hindered by two persistent challenges: computational imprecision and stubbornness in self correction. While LLMs excel at generating coherent solution narratives (Chain of Thought), they frequently fail at the final, precise steps during arithmetic, algebra, and complex counting, which leads to high rates of final answer error on benchmarks like MathArena. Furthermore, models typically struggle to effectively diagnose and pivot from their initial logical errors, making standard self correction techniques unreliable.
 
-To overcome these limitations, this project implements the Prompt Based Collaborative Agent Framework (PCAF). Instead of relying on model fine tuning, PCAF utilizes an architecture driven reasoning approach. It simulates a multi agent system within a single LLM instance through sequential, role specific prompting. The framework dynamically cycles the LLM through three specialized roles. The Solver, the Verifier and the Planner which work in an iterative, closed loop refinement process. The core objective is to demonstrate that this structured collaborative architecture significantly increases the final answer accuracy and trustworthiness compared to the model's standard zero shot baseline provided by MathArena \cite{MathArena2025}.
+To overcome these limitations, this project implements the Prompt-Based Collaborative Agent Framework (PCAF). Instead of relying on model fine tuning, PCAF utilizes an architecture driven reasoning approach. It simulates a multi agent system within a single LLM instance through sequential, role specific prompting. The framework dynamically cycles the LLM through three specialized roles. The Solver, the Verifier and the Planner which work in an iterative, closed loop refinement process. The core objective is to demonstrate that this structured collaborative architecture significantly increases the final answer accuracy and trustworthiness compared to the model's standard zero shot baseline provided by MathArena \cite{MathArena2025}.
 
 The key contributions of this work are:
 \begin{itemize}
@@ -356,14 +356,14 @@ The recovery rate of 38.9\% indicates that the rigid "Constitution" specifically
 Standard self correction often fails because LLMs are "stubborn" frequently repeating their initial error. The PCAF Planner overcomes this by translating vague Verifier critiques into mandatory, strategy shifting instructions. The high success rate on AIME 2025 Number Theory tasks (where the Planner often forced a "Brute Force" check) suggests that deterministic strategy switching is more effective than open ended "try again" prompting.
 
 \textbf{Limitations in Geometry.}
-While the system excelled in Algebra and Number Theory (56.7\% on AIME 2025), qualitative analysis of failures reveals a weakness in Geometry. When the Solver attempted to parameterize complex shapes (e.g., AIME 2025 Problem 2) in Python, it often struggled to translate visual constraints into correct coordinate code. The Verifier correctly flagged inconsistencies, but the Planner lacked a visual modality to offer spatial correction, leading to loop exhaustion. This suggests that for geometric reasoning, the text based code sandbox must be augmented with Vision Language Models (VLMs).
+While the system excelled in Algebra and Number Theory, qualitative analysis of failures reveals a weakness in Geometry. When the Solver attempted to parameterize complex shapes (e.g., AIME 2025 Problem 2) in Python, it often struggled to translate visual constraints into correct coordinate code. The Verifier correctly flagged inconsistencies, but the Planner lacked a visual modality to offer spatial correction, leading to loop exhaustion. This suggests that for geometric reasoning, the text based code sandbox must be augmented with Vision Language Models (VLMs).
 
 \section{Conclusion}
 The results of this study validate the PCAF as a successful architectural intervention for complex mathematical reasoning. By transitioning from a linear, single inference process to a modular Solver, Verifier, Planner loop, we have shown that the hallucination and stubbornness inherent in LLMs are not immutable traits, but can be managed through structured internal collaboration.
 
 The primary success of the PCAF lies in its ability to enforce Grounding. The high recovery rate observed in our experiments confirms that the framework’s deterministic correction logic effectively rescues solutions that would otherwise fail under standard conditions.
 
-Ultimately, this work proves that for high-stakes reasoning tasks, a model's architecture is as critical as its scale.
+ While the observed limitations in Geometry suggest that a purely text-based sandbox may eventually require visual-modality integration, the current PCAF provides a reliable and transparent blueprint for creating more trustworthy autonomous agents. Ultimately, this work proves that for high-stakes reasoning tasks, a model's architecture is as critical as its scale. 
 
 \newpage
 \bibliographystyle{plain}  % or ieee, alpha, acl, etc.
