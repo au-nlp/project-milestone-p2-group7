@@ -386,6 +386,28 @@ The Solver is initialized with the following system instruction, which enforces 
 \end{itemize}
 \end{quote}
 
+\subsection{Solver Few-Shot Prompts (In-Context Learning)}
+To teach the Solver how to react to specific Verifier error flags, the system prompt includes three static few-shot examples. These examples explicitly model the "Protocol Reset" behavior required for self-correction.
+
+\begin{quote}
+\small
+\textbf{\#\# REFERENCE EXAMPLE: Self-Correction from a VALUE\_MISMATCH}
+
+\textbf{Problem:} Calculate $5^{5}$ and report the result modulo 100.
+
+\textbf{TURN 0: Initial Solve (Flawed)} \\
+\textit{Solver Logic:} "I calculate $3125$. Final Answer is 3125." (Missed the modulo). \\
+\textit{Verifier Verdict:} \texttt{INVALID (VALUE\_MISMATCH)}. \\
+\textit{Planner Instruction:} "The Verifier found mismatch... RE-SOLVE. Apply transformation."
+
+\textbf{TURN 1: Solver Correction} \\
+\textit{Reasoning:} "The Planner noted a VALUE\_MISMATCH... The correct final answer must be $3125 \pmod{100}$." \\
+\texttt{print(3125 \% 100)} $\to$ \texttt{25} \\
+\textit{Final Answer:} 25
+\end{quote}
+
+\textit{(Note: The full prompt also includes similar examples for \texttt{LOGIC\_FLAW} and \texttt{METHOD\_CONFLICT} to demonstrate how to handle those specific error types.)}
+
 \subsection{Verifier System Prompt}
 The Verifier utilizes a structured "Audit Checklist" to classify errors.
 
