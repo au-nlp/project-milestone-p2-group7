@@ -39,7 +39,7 @@ This repository is organized to separate the orchestration logic from the agent 
 1. **Clone the repository:**
 ```bash
 git clone [https://github.com/au-nlp/project-milestone-p2-group7.git](https://github.com/au-nlp/project-milestone-p2-group7.git)
-cd nlp-group-7-p3
+cd project-milestone-p2-group7
 
 ```
 
