@@ -5,10 +5,15 @@
 **Paper:** [Read the Full Report (PDF)](./report.pdf)
 
 ## 📄 Abstract
-[cite_start]The inherent unreliability of Large Language Models (LLMs) in complex, multi-step calculations necessitates architectural interventions to achieve trustworthy accuracy[cite: 5]. [cite_start]This project introduces the **Prompt-Based Collaborative Agent Framework (PCAF)**, a novel architecture utilizing a single LLM instance (DeepSeek-V3-0324) to simulate a sophisticated, three-agent collaborative system (Solver, Verifier, and Planner)[cite: 6].
-
-[cite_start]Instead of relying on fine-tuning, PCAF employs sequential, role-specific prompting to enforce a "Code-First" mandate[cite: 14, 22]. [cite_start]Through systematic evaluation on the MathArena benchmark (AIME, HMMT, BRUMO, SMT, CMIMC), the framework achieved a global accuracy of **53.65%** (compared to a 39.5% baseline) and demonstrated a **38.9% recovery rate**, validating the efficacy of deterministic self-correction[cite: 8].
-
+The inherent unreliability of Large Language Models (LLMs) in complex, multi step calculations necessitates architectural 
+  interventions to achieve trustworthy accuracy in mathematical reasoning. This paper introduces 
+  the Prompt Based Collaborative Agent Framework (PCAF), a novel, architecture driven approach 
+  aimed at significantly improving final answer accuracy on the MathArena benchmark suite, including AIME 2025, HMMT (Feb/Nov) 2025, BRUMO 2025, SMT 2025, and CMIMC 2025.
+  The method utilizes a single LLM instance (DeepSeek-V3-03-24) and employs sequential, 
+  role specific prompting to simulate a sophisticated, three agent collaborative system (Solver, Verifier, and Planner).
+  This architecture transforms the LLM's linear reasoning into a persistent self correction mechanism. 
+  Through systematic evaluation across six distinct competition formats, we demonstrate that PCAF yields a significant accuracy uplift over the MathArena Zero-Shot CoT baseline, specifically improving scores from 50.0\% to 56.67\% on AIME 2025 and from 29.0\% to 45.83\% on HMMT Feb 2025. A global recovery rate of 38.9\% across all benchmarks confirms the efficacy of deterministic, architecture-driven reflection in transforming initial logical failures into verified successes.
+  
 ## 📂 Repository Structure
 
 This repository is organized to separate the orchestration logic from the agent definitions and tools, adhering to the Milestone P3 requirements.
