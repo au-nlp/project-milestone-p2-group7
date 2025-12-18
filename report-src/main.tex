@@ -55,6 +55,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}         % colors
 \usepackage{amsmath}
+\usepackage{graphicx}
 
 \DeclareUnicodeCharacter{2248}{\ensuremath{\approx}} % Fixes U+2248 (≈)
 \DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}    % Fixes U+2260 (≠)
@@ -161,6 +162,13 @@ The core cycle involves three sequential steps:
 \end{enumerate}
 
 The system employs an \textbf{Early Stopping} mechanism: the loop terminates immediately if the Verifier outputs a valid signal, minimizing token usage.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Architecture_Design.png}
+    \caption{PCAF System Architecture}
+    \label{fig:pcaf_architecture}
+\end{figure}
 
 \subsection{The Agents}
 
@@ -347,6 +355,7 @@ The primary success of the PCAF lies in its ability to enforce Grounding. While 
 
 Ultimately, this work proves that for high-stakes reasoning tasks, a model's architecture is as critical as its scale. While the observed limitations in Geometry suggest that a purely text-based sandbox may eventually require visual-modality integration, the current PCAF provides a reliable and transparent blueprint for creating more trustworthy autonomous agents. For researchers and developers aiming to deploy LLMs in technical domains, the PCAF offers a path toward a zero-trust reasoning paradigm where every logic step is critiqued, verified, and, if necessary, strategically corrected.
 
+\newpage
 \bibliographystyle{plain}  % or ieee, alpha, acl, etc.
 \bibliography{references}
 
@@ -554,4 +563,3 @@ code_str = code_str.replace("≥", ">=")
 \end{itemize}
 
 \end{document}
-
