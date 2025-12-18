@@ -151,7 +151,7 @@ The PCAF architecture consistently outperforms the Zero-Shot CoT baseline across
 | Competition Subset | Baseline Accuracy | PCAF Accuracy | Recovery Rate |
 | --- | --- | --- | --- |
 | **AIME 2025** | **50.0%** | **56.67%** | 29.5% |
-| **BRUMO 2025** | N/A | N/A | 48.2% |
+| **BRUMO 2025** | N/A | 65.83% | 48.2% |
 | **CMIMC 2025** | N/A | 51.25% | 41,6% |
 | **HMMT Feb 2025** | **29.0%** | **45.83%** | 35.0% |
 | **HMMT Nov 2025** | N/A | 46.67% | 25.4% |
