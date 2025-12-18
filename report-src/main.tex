@@ -359,11 +359,11 @@ Standard self correction often fails because LLMs are "stubborn" frequently repe
 While the system excelled in Algebra and Number Theory (56.7\% on AIME 2025), qualitative analysis of failures reveals a weakness in Geometry. When the Solver attempted to parameterize complex shapes (e.g., AIME 2025 Problem 2) in Python, it often struggled to translate visual constraints into correct coordinate code. The Verifier correctly flagged inconsistencies, but the Planner lacked a visual modality to offer spatial correction, leading to loop exhaustion. This suggests that for geometric reasoning, the text based code sandbox must be augmented with Vision Language Models (VLMs).
 
 \section{Conclusion}
-The results of this study validate the Prompt-Based Collaborative Agent Framework (PCAF) as a successful architectural intervention for complex mathematical reasoning. By transitioning from a linear, single-inference process to a modular Solver-Verifier-Planner loop, we have demonstrated that the hallucination and stubbornness inherent in modern Large Language Models (LLMs) are not immutable traits, but can be managed through structured collaboration.
+The results of this study validate the PCAF as a successful architectural intervention for complex mathematical reasoning. By transitioning from a linear, single inference process to a modular Solver, Verifier, Planner loop, we have shown that the hallucination and stubbornness inherent in LLMs are not immutable traits, but can be managed through structured internal collaboration.
 
-The primary success of the PCAF lies in its ability to enforce Grounding. While standard Chain-of-Thought (CoT) models often succumb to linguistic intuition. The high recovery rate observed in our experiments confirms that the framework’s deterministic correction logic effectively rescues solutions that would otherwise fail under standard conditions.
+The primary success of the PCAF lies in its ability to enforce Grounding. The high recovery rate observed in our experiments confirms that the framework’s deterministic correction logic effectively rescues solutions that would otherwise fail under standard conditions.
 
-Ultimately, this work proves that for high-stakes reasoning tasks, a model's architecture is as critical as its scale. While the observed limitations in Geometry suggest that a purely text-based sandbox may eventually require visual-modality integration, the current PCAF provides a reliable and transparent blueprint for creating more trustworthy autonomous agents. For researchers and developers aiming to deploy LLMs in technical domains, the PCAF offers a path toward a zero-trust reasoning paradigm where every logic step is critiqued, verified, and, if necessary, strategically corrected.
+Ultimately, this work proves that for high-stakes reasoning tasks, a model's architecture is as critical as its scale.
 
 \newpage
 \bibliographystyle{plain}  % or ieee, alpha, acl, etc.
