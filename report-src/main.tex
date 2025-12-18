@@ -55,6 +55,10 @@
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}         % colors
 \usepackage{amsmath}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}} % Fixes U+2248 (≈)
+\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}    % Fixes U+2260 (≠)
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}    % Fixes U+2264 (≤)
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}    % Fixes U+2265 (≥)
 
 % Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote. 
 \title{Prompt-Based Collaborative Agent Framework (PCAF) for Enhanced LLM Mathematical Reasoning}
@@ -344,5 +348,147 @@ high value technique for transforming model performance on complex, competitive 
 
 \bibliographystyle{plain}  % or ieee, alpha, acl, etc.
 \bibliography{references}
+
+\newpage
+\appendix
+\section{System Prompts}
+\label{app:prompts}
+
+\subsection{Solver System Prompt}
+The Solver is initialized with the following system instruction, which enforces the Dual-Verification Protocol. Note that the prompt explicitly forbids the model from relying on a single method.
+
+\begin{quote}
+\small
+\textbf{System:} You are a Rigorous Mathematical Solver. To guarantee accuracy, you must solve the problem using \textbf{TWO STRICTLY DIFFERENT METHODS}.
+
+\textbf{\#\#\# PROTOCOL: THE 'ANALYTICAL vs NAIVE' CHECK}
+\begin{enumerate}
+    \item \textbf{Method 1: Analytical/Symbolic}: Use \texttt{sympy}, algebra, or efficient algorithms to solve the problem mathematically.
+    \item \textbf{Method 2: Naive Brute-Force (The 'Dumb' Check)}:
+    \begin{itemize}
+        \item Write a \textbf{simple, unoptimized Python loop} that iterates through all possibilities.
+        \item \textbf{DO NOT} use formulas or clever shortcuts in Method 2. Just count or simulate step-by-step.
+        \item \textit{Example}: If counting divisors, Method 1 uses prime factors; Method 2 iterates \texttt{for i in range(1, n+1): if n\%i==0...}
+    \end{itemize}
+    \item \textbf{Comparison}: Check if Method 1 == Method 2.
+    \begin{itemize}
+        \item If they MATCH: Print the result.
+        \item If they DIFFER: Trust Method 2 (the brute force) or debug Method 1. Do not hallucinate a match.
+    \end{itemize}
+\end{enumerate}
+
+\textbf{\#\#\# OUTPUT RULES}
+\begin{itemize}
+    \item Write all code in \texttt{```python ... ```} blocks.
+    \item You MUST explicitly \texttt{print()} the result from BOTH methods.
+    \item Final Answer must be the value confirmed by BOTH methods.
+\end{itemize}
+\end{quote}
+
+\subsection{Verifier System Prompt}
+The Verifier utilizes a structured "Audit Checklist" to classify errors.
+
+\begin{quote}
+\small
+\textbf{System:} You are a Skeptical Math Auditor. Your goal is to catch LOGICAL ERRORS that standard code checks miss.
+
+\textbf{\#\#\# AUDIT CHECKLIST}
+\begin{enumerate}
+    \item \textbf{The 'Double-Check' Rule}: Did the Solver use \textbf{two different approaches} (e.g., Simulation vs. Formula) to confirm the answer?
+    \begin{itemize}
+        \item If they only used one method (e.g., just a formula) and it looks complex/risky, mark as \textbf{Risky}.
+        \item If they used two methods and they \textbf{CONFLICT}, REJECT immediately.
+    \end{itemize}
+    \item \textbf{The 'Consistency' Rule}: Does the [Code Output] match the text? (Crucial).
+    \item \textbf{Logic Trap Checks}:
+    \begin{itemize}
+        \item \textbf{Combinatorics}: Did they brute force it? If they used a formula like \texttt{nCr}, did they verify it for small N?
+        \item \textbf{Geometry}: Did they use coordinates? Visual assumptions are grounds for REJECTION.
+        \item \textbf{Number Theory}: Did they handle edge cases (e.g., 0, 1, negatives)?
+    \end{itemize}
+\end{enumerate}
+
+\textbf{\#\#\# OUTPUT FORMAT}
+Return ONLY this JSON:
+\texttt{\{"valid": boolean, "error\_type": "LOGIC\_FLAW" | "VALUE\_MISMATCH" | "METHOD\_CONFLICT", "critique": string\}}
+\end{quote}
+
+\subsection{Planner Instructional Templates}
+The Planner does not use a single system prompt but explicitly routes error types to specific string templates.
+
+\begin{description}
+    \item[Template 1: Syntax Repair] (Triggered by Runtime Errors) \\
+    \textit{"The previous code attempt failed with a RUNTIME ERROR... \textbf{MANDATORY ACTION:} Fix the syntax. Do not change the math logic yet; just make the code run."}
+    
+    \item[Template 2: Protocol Reset] (Triggered by \texttt{VALUE\_MISMATCH}) \\
+    \textit{"\textbf{CRITICAL CONFLICT:} Your text claims one answer, but your Python code calculated a different one. \textbf{PROTOCOL:} 1. IGNORE your previous text intuition. It was wrong. 2. \textbf{RE-EXECUTE the code} to confirm the calculated value is stable... accept its output as the truth."}
+    
+    \item[Template 3: General Critique Relay] (Triggered by \texttt{LOGIC\_FLAW} / \texttt{METHOD\_CONFLICT}) \\
+    \textit{"The Verifier failed the solution. Reason: \{critique\}. Please fix the code to match the reasoning."}
+\end{description}
+
+\section{Implementation Details}
+\label{app:impl}
+
+\subsection{The Persistent Sandbox Environment}
+The \texttt{PersistentSolverSandbox} class (defined in \texttt{sandbox.py}) provides the runtime environment for the Solver. It differs from standard "code interpreter" tools in two key ways:
+
+\begin{itemize}
+    \item \textbf{State Persistence:} The sandbox initializes a dictionary \texttt{self.globals} which retains variable state across multiple execution calls. This allows the Solver to define a function in Turn 1 and call it in Turn 2.
+    \item \textbf{Safety Wrapper:} Execution is wrapped in the \texttt{func\_timeout} library with a strict \textbf{20-second limit}. This prevents infinite loops (common in naive brute-force attempts) from hanging the evaluation pipeline.
+\end{itemize}
+
+\subsection{Input Sanitization}
+To handle the tokenization artifacts common in mathematical LLM outputs, the sandbox implements a pre-execution sanitization layer:
+
+\begin{verbatim}
+code_str = code_str.replace("≈", "=")
+code_str = code_str.replace("≠", "!=")
+code_str = code_str.replace("≤", "<=")
+code_str = code_str.replace("≥", ">=")
+\end{verbatim}
+
+\section{Recovery Trace Case Study}
+\label{app:trace}
+
+\textit{The following trace illustrates a successful self-correction from the HMMT Feb 2025 dataset (Problem 12). It demonstrates how the PCAF architecture breaks ``Reasoning Inertia''—the tendency of LLMs to reject correct code outputs that contradict their internal intuition.}
+
+\noindent\hrulefill
+
+\textbf{Problem:} Kevin the frog in on the bottom-left lily pad of a $3 \times 3$ grid of lily pads, and his home is at the topright lily pad. He can only jump between two lily pads which are horizontally or vertically adjacent. Compute the number of ways to remove $4$ of the lily pads so that the bottom-left and top-right lily pads both remain, but Kelvin cannot get home.
+
+
+\vspace{0.5em}
+\textbf{TURN 0: Initial Attempt (Failure)}
+\begin{itemize}
+    \item \textbf{Solver Strategy:} Tries to solve using both Brute-Force and Analytical methods.
+    \item \textbf{Initial Code Output:} The Brute-Force script correctly calculates \textbf{29}.
+    \item \textbf{Solver Hallucination:} The Solver rejects the code's result because it contradicts its flawed analytical intuition (which guessed 5).
+    \item \textbf{Solver Text Reasoning:} ``The first run of the corrected brute-force method (29) is incorrect... The second run (5) matches the analytical method... confirming the correct answer is 5.''
+    \item \textbf{Final Answer (Turn 0):} 5.
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{VERIFICATION (The Intervention)}
+\begin{itemize}
+    \item \textbf{Verifier Verdict:} \texttt{INVALID}
+    \item \textbf{Error Type:} \texttt{METHOD\_CONFLICT}
+    \item \textbf{Critique:} ``The solver initially reported conflicting results between Method 2 (Brute-Force: 29) and Method 1 (Analytical: 5)... The intermediate output of 29 indicates a lack of reliable dual-verification. The final agreement is only achieved after corrections, suggesting the initial logical approach was flawed.''
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{PLANNING (The Instruction)}
+\begin{itemize}
+    \item \textbf{Planner Action:} Triggered \textbf{Critique Relay}.
+    \item \textbf{Instruction:} ``The Verifier failed the solution... The initial inconsistency and intermediate output of 29 indicate a lack of reliable dual-verification... Please fix the code to match the reasoning.''
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{TURN 1: Correction (Success)}
+\begin{itemize}
+    \item \textbf{Solver Reasoning:} ``I see the persistent discrepancy... Method 2 (Brute-Force) enumerates all possibilities and correctly counts \textbf{29} disconnecting configurations. My previous analytical method underestimated the count.''
+    \item \textbf{Solver Conclusion:} ``Both methods now consistently agree on the correct count of 29.''
+    \item \textbf{Final Answer:} 29.
+\end{itemize}
 
 \end{document}
